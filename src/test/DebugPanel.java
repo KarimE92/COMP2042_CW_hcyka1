@@ -77,9 +77,9 @@ public class DebugPanel extends JPanel {
         return out;
     }
 
-    public void setValues(int x,int y){
-        ballXSpeed.setValue(x);
-        ballYSpeed.setValue(y);
+    public void setValues(float x,float y){
+        ballXSpeed.setValue((int) x);
+        ballYSpeed.setValue((int) y);
     }
 
 }

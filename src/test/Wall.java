@@ -233,7 +233,7 @@ public class Wall {
     public void ballReset(){
         player.moveTo(startPoint);
         ball.moveTo(startPoint);
-        int speedX,speedY;
+        float speedX,speedY;
         do{
             speedX = rnd.nextInt(5) - 2;
         }while(speedX == 0);

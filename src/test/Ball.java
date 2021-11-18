@@ -22,8 +22,8 @@ abstract public class Ball {
     private Color border;
     private Color inner;
 
-    private int speedX;
-    private int speedY;
+    private float speedX;
+    private float speedY;
 
     public Ball(Point2D center,int radiusA,int radiusB,Color inner,Color border){
         this.center = center;
@@ -50,7 +50,20 @@ abstract public class Ball {
     protected abstract Shape makeBall(Point2D center,int radiusA,int radiusB);
 
     public void move(){
+        float acceleration = (float) 0.0005; //this will make the ball get faster and faster every frame in the direction it is going
         RectangularShape tmp = (RectangularShape) ballFace;
+        if (speedX > 0 && speedX < 10){ //if the ball is moving to the right it should accelerate to the right up to a max speed
+            speedX+=acceleration;
+        }else if(speedX < 0 && speedX > -10){ //if the ball is moving to the left it should accelerate to the left up to a max speed
+            speedX-=acceleration;
+        }
+        if (speedY > 0 && speedY < 10){ //if the ball is moving down it should accelerate downwards up to a max speed
+            speedY+=acceleration;
+        }else if(speedY < 0 && speedY > -10){ //if the ball is moving up it should accelerate upwards up to a max speed
+            speedY-=acceleration;
+        }
+        System.out.println("SpeedY ");
+        System.out.println(speedY);
         center.setLocation((center.getX() + speedX),(center.getY() + speedY));
         double w = tmp.getWidth();
         double h = tmp.getHeight();
@@ -62,7 +75,7 @@ abstract public class Ball {
         ballFace = tmp;
     }
 
-    public void setSpeed(int x,int y){
+    public void setSpeed(float x,float y){
         speedX = x;
         speedY = y;
     }
@@ -118,11 +131,11 @@ abstract public class Ball {
         right.setLocation(center.getX()+(width / 2),center.getY());
     }
 
-    public int getSpeedX(){
+    public float getSpeedX(){
         return speedX;
     }
 
-    public int getSpeedY(){
+    public float getSpeedY(){
         return speedY;
     }
 
