@@ -62,8 +62,6 @@ abstract public class Ball {
         }else if(speedY < 0 && speedY > -10){ //if the ball is moving up it should accelerate upwards up to a max speed
             speedY-=acceleration;
         }
-        System.out.println("SpeedY ");
-        System.out.println(speedY);
         center.setLocation((center.getX() + speedX),(center.getY() + speedY));
         double w = tmp.getWidth();
         double h = tmp.getHeight();
