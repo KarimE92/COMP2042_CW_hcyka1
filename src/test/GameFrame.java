@@ -36,7 +36,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
     public GameFrame(){
         super();
-
+        setResizable(false); //temporarily there since there's a bug with resizing the game
         gaming = false;
 
         this.setLayout(new BorderLayout());
