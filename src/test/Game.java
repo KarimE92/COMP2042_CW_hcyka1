@@ -11,23 +11,17 @@ import java.util.Random;
 
 
 public class Game {
-    private static final int LEVELS_COUNT = 4; //the game has 4 levels
 
     private Point startPoint; //the starting point of the level
 
-    private static final int CLAY = 1;
-    private static final int STEEL = 2;
-    private static final int CEMENT = 3;
 
     private Random rnd;
     private Rectangle area;
     Ball ball;
     Player player;
     Wall wall;
-    private int level;
     private int ballCount;
     private boolean ballLost;
-    int brickCount;
 
 
     protected Game(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {
@@ -41,7 +35,6 @@ public class Game {
         rnd = new Random();
         player = new Player((Point) ballPos.clone(),150,10, drawArea);
 
-        level = 0;
         wall = new Wall(drawArea,brickCount,lineCount,brickDimensionRatio);
 
         area = drawArea;
@@ -64,12 +57,6 @@ public class Game {
     }
 
 
-
-
-
-
-
-
     public void findImpacts(){
         if(player.impact(ball)){
             ball.reverseY();
@@ -78,7 +65,7 @@ public class Game {
             /*for efficiency reverse is done into method impactWall
              * because for every brick program checks for horizontal and vertical impacts
              */
-            brickCount--;
+            wall.BrickCollision();
         }
         else if(impactBorder()) {
             ball.reverseX();
@@ -91,7 +78,6 @@ public class Game {
             ballLost = true;
         }
     }
-
     boolean impactWall(){
         for(Brick b : wall.bricks){
             switch(b.findImpact(ball)) {
@@ -114,11 +100,13 @@ public class Game {
         }
         return false;
     }
-
     private boolean impactBorder(){
         Point2D p = ball.getPosition();
         return ((p.getX() < area.getX()) ||(p.getX() > (area.getX() + area.getWidth())));
     }
+
+
+
 
     public void LevelReset(){
         player.moveTo(startPoint);
@@ -139,7 +127,6 @@ public class Game {
     public void setBallXSpeed(int s){
         ball.setXSpeed(s);
     }
-
     public void setBallYSpeed(int s){
         ball.setYSpeed(s);
     }
@@ -148,20 +135,15 @@ public class Game {
     public int getBallCount(){
         return ballCount;
     }
-
+    public void resetBallCount(){
+        ballCount = 3;
+    }
+    public boolean ballEnd(){
+        return ballCount == 0;
+    }
     public boolean isBallLost(){
         return ballLost;
     }
 
 
-
-
-
-    public boolean ballEnd(){
-        return ballCount == 0;
-    }
-
-    public void resetBallCount(){
-        ballCount = 3;
-    }
 }

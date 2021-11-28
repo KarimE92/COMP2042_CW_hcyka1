@@ -41,7 +41,6 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     private Timer gameTimer;
     private Game game;
-    private Wall wall;
 
     private String message;
 
@@ -82,19 +81,20 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
             message = String.format("Bricks: %d Balls %d",game.wall.getBrickCount(),game.getBallCount());
             if(game.isBallLost()){
                 if(game.ballEnd()){
-                    wall.wallReset();
+                    game.wall.wallReset();
+                    game.resetBallCount();
                     message = "Game over";
                 }
                 game.LevelReset();
                 gameTimer.stop();
             }
             else if(game.wall.isDone()){
-                if(wall.hasLevel()){
+                if(game.wall.hasLevel()){
                     message = "Go to Next Level";
                     gameTimer.stop();
                     game.LevelReset();
-                    wall.wallReset();
-                    wall.nextLevel();
+                    game.wall.wallReset();
+                    game.wall.nextLevel();
                 }
                 else{
                     message = "ALL WALLS DESTROYED";

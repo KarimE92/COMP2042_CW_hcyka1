@@ -18,8 +18,7 @@
 package test;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.util.Random;
+
 
 
 public class Wall {
@@ -33,7 +32,6 @@ public class Wall {
 
 
     Brick[] bricks;
-    Player player;
 
     private Brick[][] levels;
     private int level;
@@ -144,13 +142,14 @@ public class Wall {
     }
 
 
-
-
     public int getBrickCount(){
         return brickCount;
     }
 
 
+    public int BrickCollision(){
+        return brickCount--;
+    }
 
     public boolean isDone(){
         return brickCount == 0;
@@ -165,15 +164,11 @@ public class Wall {
         return level < levels.length;
     }
 
-
-
     public void wallReset(){
         for(Brick b : bricks)
             b.repair();
         brickCount = bricks.length;
     }
-
-
 
     private Brick makeBrick(Point point, Dimension size, int type){
         Brick out;

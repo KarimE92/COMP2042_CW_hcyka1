@@ -40,7 +40,6 @@ public class DebugPanel extends JPanel {
 
     public DebugPanel(Game game){
 
-        this.wall = wall;
         this.game = game;
         initialize();
 
