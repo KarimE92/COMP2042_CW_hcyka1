@@ -83,10 +83,6 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     GameBoard_View GetGameView(){return GameView;}
 
-
-
-
-
     @Override
     public void keyTyped(KeyEvent keyEvent) {
     }
@@ -96,27 +92,21 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         switch(keyEvent.getKeyCode()){
             case KeyEvent.VK_A:
                 game.player.moveLeft();
-                System.out.println("A");
                 break;
             case KeyEvent.VK_D:
                 game.player.movRight();
-                System.out.println("D");
                 break;
             case KeyEvent.VK_ESCAPE:
-                System.out.println("Esc");
                 showPauseMenu = !showPauseMenu;
                 GameView.updatescreen(this);
                 gameTimer.stop();
                 break;
             case KeyEvent.VK_SPACE:
-                System.out.println("Space");
                 if(!showPauseMenu)
                     if(gameTimer.isRunning()) {
-                        System.out.println("Pause");
                         gameTimer.stop();
 
                     }else{
-                        System.out.println("unpause");
                         gameTimer.start();
                     }
                 break;

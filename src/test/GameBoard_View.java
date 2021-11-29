@@ -52,7 +52,6 @@ public class GameBoard_View extends JComponent {
 
     public void updatescreen(GameBoard GameBoard){
         this.Board = GameBoard;
-        System.out.println("Repaint occuring");
         repaint();
     }
     public void paint(Graphics g){
