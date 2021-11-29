@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 
-public class GameBoard_View extends JComponent {
+public class Game_View extends JComponent {
 
     private String message;
     void setmessage(String string){message = string; }
@@ -17,7 +17,7 @@ public class GameBoard_View extends JComponent {
     private static final Color MENU_COLOR = new Color(0, 255, 0); //pause menu colour
     private int strLen;
 
-    private GameBoard Board;
+    private Game_Controller Board;
 
     private static final int DEF_WIDTH = 600;
     int getwidth(){return DEF_WIDTH;}
@@ -36,7 +36,7 @@ public class GameBoard_View extends JComponent {
     Rectangle getrestartButtonRect(){return restartButtonRect;}
 
 
-    protected GameBoard_View(GameBoard GameBoard) {
+    protected Game_View(Game_Controller GameBoard) {
         Board = GameBoard;
         strLen = 0;
         message = "Press Spacebar to Start!";
@@ -50,7 +50,7 @@ public class GameBoard_View extends JComponent {
 
     }
 
-    public void updatescreen(GameBoard GameBoard){
+    public void updatescreen(Game_Controller GameBoard){
         this.Board = GameBoard;
         repaint();
     }
@@ -72,7 +72,7 @@ public class GameBoard_View extends JComponent {
         drawPlayer(Board.getGame().player,g2d);
 
         if(Board.getpausemenu())
-            drawMenu(g2d, Board);
+            drawMenu(g2d);
 
         Toolkit.getDefaultToolkit().sync();
     }
@@ -117,7 +117,7 @@ public class GameBoard_View extends JComponent {
         g2d.setColor(tmp);
     }
 
-    private void drawMenu(Graphics2D g2d, GameBoard GameBoard){
+    private void drawMenu(Graphics2D g2d){
         obscureGameBoard(g2d);
         drawPauseMenu(g2d);
     }

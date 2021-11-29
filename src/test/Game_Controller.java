@@ -1,5 +1,5 @@
 /*
- *  Brick Destroy - A simple Arcade video game
+ *  Brick Destroy - A simple Arcade video gameModel
  *   Copyright (C) 2017  Filippo Ranza
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -23,14 +23,14 @@ import java.awt.event.*;
 
 
 
-public class GameBoard extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
+public class Game_Controller extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
 
 
     private Timer gameTimer;
-    private Game game;
-    Game getGame(){return game;}
+    private Game_Model gameModel;
+    Game_Model getGame(){return gameModel;}
 
-    private GameBoard_View GameView;
+    private Game_View GameView;
 
 
     private boolean showPauseMenu;
@@ -38,37 +38,37 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
 
     private DebugConsole debugConsole;
 
-    public GameBoard(JFrame owner){
+    public Game_Controller(JFrame owner){
         super();
         showPauseMenu = false;
-        GameView = new GameBoard_View(this);
-        game = new Game(new Rectangle(0,0,GameView.getwidth(),GameView.getheight()),30,4,6/2,new Point(300,430));
+        GameView = new Game_View(this);
+        gameModel = new Game_Model(new Rectangle(0,0,GameView.getwidth(),GameView.getheight()),30,4,6/2,new Point(300,430));
 
-        debugConsole = new DebugConsole(owner,game,this);
+        debugConsole = new DebugConsole(owner, gameModel,this);
 
         //initialize the first level
-        game.wall.nextLevel();
+        gameModel.wall.nextLevel();
 
         gameTimer = new Timer(10,e ->{
-            game.move();
-            game.findImpacts();
-            GameView.setmessage(String.format("Bricks: %d Balls %d",game.wall.getBrickCount(),game.getBallCount()));
-            if(game.isBallLost()){
-                if(game.ballEnd()){
-                    game.wall.wallReset();
-                    game.resetBallCount();
-                    GameView.setmessage("Game over");
+            gameModel.move();
+            gameModel.findImpacts();
+            GameView.setmessage(String.format("Bricks: %d Balls %d", gameModel.wall.getBrickCount(), gameModel.getBallCount()));
+            if(gameModel.isBallLost()){
+                if(gameModel.ballEnd()){
+                    gameModel.wall.wallReset();
+                    gameModel.resetBallCount();
+                    GameView.setmessage("Game Over");
                 }
-                game.LevelReset();
+                gameModel.LevelReset();
                 gameTimer.stop();
             }
-            else if(game.wall.isDone()){
-                if(game.wall.hasLevel()){
+            else if(gameModel.wall.isDone()){
+                if(gameModel.wall.hasLevel()){
                     GameView.setmessage("Go to Next Level");
                     gameTimer.stop();
-                    game.LevelReset();
-                    game.wall.wallReset();
-                    game.wall.nextLevel();
+                    gameModel.LevelReset();
+                    gameModel.wall.wallReset();
+                    gameModel.wall.nextLevel();
                 }
                 else{
                     GameView.setmessage("ALL WALLS DESTROYED");
@@ -81,7 +81,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     }
 
 
-    GameBoard_View GetGameView(){return GameView;}
+    Game_View GetGameView(){return GameView;}
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {
@@ -91,10 +91,10 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
     public void keyPressed(KeyEvent keyEvent) {
         switch(keyEvent.getKeyCode()){
             case KeyEvent.VK_A:
-                game.player.moveLeft();
+                gameModel.player.moveLeft();
                 break;
             case KeyEvent.VK_D:
-                game.player.movRight();
+                gameModel.player.movRight();
                 break;
             case KeyEvent.VK_ESCAPE:
                 showPauseMenu = !showPauseMenu;
@@ -114,13 +114,13 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
                 if(keyEvent.isAltDown() && keyEvent.isShiftDown())
                     debugConsole.setVisible(true);
             default:
-                game.player.stop();
+                gameModel.player.stop();
         }
     }
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        game.player.stop();
+        gameModel.player.stop();
     }
 
     @Override
@@ -134,8 +134,8 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         }
         else if(GameView.getrestartButtonRect().contains(p)){
             GameView.setmessage("Restarting Game...");
-            game.LevelReset();
-            game.wall.wallReset();
+            gameModel.LevelReset();
+            gameModel.wall.wallReset();
             showPauseMenu = false;
             GameView.updatescreen(this);
         }

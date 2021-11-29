@@ -1,5 +1,5 @@
 /*
- *  Brick Destroy - A simple Arcade video game
+ *  Brick Destroy - A simple Arcade video gameModel
  *   Copyright (C) 2017  Filippo Ranza
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -36,18 +36,18 @@ public class DebugPanel extends JPanel {
     private JSlider ballYSpeed;
 
     private Wall wall;
-    private Game game;
+    private Game_Model gameModel;
 
-    public DebugPanel(Game game){
+    public DebugPanel(Game_Model gameModel){
 
-        this.game = game;
+        this.gameModel = gameModel;
         initialize();
 
-        skipLevel = makeButton("Skip Level",e -> game.wall.nextLevel());
-        resetBalls = makeButton("Reset Balls",e -> game.resetBallCount());
+        skipLevel = makeButton("Skip Level",e -> gameModel.wall.nextLevel());
+        resetBalls = makeButton("Reset Balls",e -> gameModel.resetBallCount());
 
-        ballXSpeed = makeSlider(-4,4,e -> game.setBallXSpeed(ballXSpeed.getValue()));
-        ballYSpeed = makeSlider(-4,4,e -> game.setBallYSpeed(ballYSpeed.getValue()));
+        ballXSpeed = makeSlider(-4,4,e -> gameModel.setBallXSpeed(ballXSpeed.getValue()));
+        ballYSpeed = makeSlider(-4,4,e -> gameModel.setBallYSpeed(ballYSpeed.getValue()));
 
         this.add(skipLevel);
         this.add(resetBalls);

@@ -1,5 +1,5 @@
 /*
- *  Brick Destroy - A simple Arcade video game
+ *  Brick Destroy - A simple Arcade video gameModel
  *   Copyright (C) 2017  Filippo Ranza
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -29,18 +29,18 @@ public class DebugConsole extends JDialog implements WindowListener{
 
     private JFrame owner;
     private DebugPanel debugPanel;
-    private GameBoard gameBoard;
-    private Game game;
+    private Game_Controller gameBoard;
+    private Game_Model gameModel;
 
 
-    public DebugConsole(JFrame owner,Game game,GameBoard gameBoard){
+    public DebugConsole(JFrame owner, Game_Model gameModel, Game_Controller gameBoard){
 
-        this.game = game;
+        this.gameModel = gameModel;
         this.owner = owner;
         this.gameBoard = gameBoard;
         initialize();
 
-        debugPanel = new DebugPanel(game);
+        debugPanel = new DebugPanel(gameModel);
         this.add(debugPanel,BorderLayout.CENTER);
 
 
@@ -92,7 +92,7 @@ public class DebugConsole extends JDialog implements WindowListener{
     @Override
     public void windowActivated(WindowEvent windowEvent) {
         setLocation();
-        Ball b = game.ball;
+        Ball b = gameModel.ball;
         debugPanel.setValues(b.getSpeedX(),b.getSpeedY());
     }
 
