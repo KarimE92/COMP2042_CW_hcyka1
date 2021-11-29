@@ -20,26 +20,21 @@ package test;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.font.FontRenderContext;
 
 
 
 public class GameBoard extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
 
-    private static final int DEF_WIDTH = 600;
-    private static final int DEF_HEIGHT = 450;
-
-    private static final Color BG_COLOR = Color.WHITE;
 
     private Timer gameTimer;
     private Game game;
     Game getGame(){return game;}
+
     private GameBoard_View GameView;
 
 
     private boolean showPauseMenu;
     boolean getpausemenu(){return showPauseMenu;}
-    void setpausemenu(){showPauseMenu = !showPauseMenu;}
 
     private DebugConsole debugConsole;
 
@@ -47,8 +42,7 @@ public class GameBoard extends JComponent implements KeyListener,MouseListener,M
         super();
         showPauseMenu = false;
         GameView = new GameBoard_View(this);
-        GameView.setmessage("");
-        game = new Game(new Rectangle(0,0,DEF_WIDTH,DEF_HEIGHT),30,4,6/2,new Point(300,430));
+        game = new Game(new Rectangle(0,0,GameView.getwidth(),GameView.getheight()),30,4,6/2,new Point(300,430));
 
         debugConsole = new DebugConsole(owner,game,this);
 
