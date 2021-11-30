@@ -7,14 +7,19 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
+import javax.swing.JTextArea;
 
 public class InfoMenu extends JComponent implements MouseListener, MouseMotionListener{
 
 
     private static final String BACK_TEXT = "Back";
-    private static final String INSTRUCTIONS = "This is how you play the game";
-
+    private static final String INSTRUCTIONS = "How To Play:";
+    private static final String INSTRUCTIONS1 = "Use A and D to move around. Hold shift to sprint";
+    private static final String INSTRUCTIONS2 = "Destroy all bricks to move on to the next level";
+    private static final String INSTRUCTIONS3 = "Grab powerups along the way to help you";
+    private Font TitleFont;
     private Font instructionsFont;
+
 
     private static final Color BG_COLOR = Color.GREEN.darker();
     private static final Color BORDER_COLOR = new Color(200,8,21); //Venetian Red
@@ -31,10 +36,6 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
 
     private BasicStroke borderStoke;
     private BasicStroke borderStoke_noDashes;
-
-    private Font greetingsFont;
-    private Font gameTitleFont;
-    private Font creditsFont;
     private Font buttonFont;
 
     private GameFrame owner;
@@ -43,8 +44,6 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
 
 
     public InfoMenu(GameFrame owner,Dimension area){
-        System.out.println("Initialize infomenu");
-
         this.setFocusable(true);
         this.requestFocusInWindow();
 
@@ -62,7 +61,9 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
         borderStoke = new BasicStroke(BORDER_SIZE,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,0,DASHES,0);
         borderStoke_noDashes = new BasicStroke(BORDER_SIZE,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND);
         buttonFont = new Font("Monospaced",Font.PLAIN,backButton.height-2);
-        instructionsFont = new Font("Noto Mono",Font.PLAIN,25);
+        TitleFont = new Font("Noto Mono",Font.PLAIN,40);
+        instructionsFont = new Font("Monospaced", Font.PLAIN, 20);
+
 
     }
 
@@ -100,8 +101,6 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
     private void drawContainer(Graphics2D g2d){
         Color prev = g2d.getColor();
 
-        g2d.setColor(BG_COLOR);
-        g2d.fill(menuFace);
 
         Stroke tmp = g2d.getStroke();
 
@@ -129,11 +128,25 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
 
         int sX,sY;
 
-        sX = (int)(menuFace.getWidth() - greetingsRect.getWidth()) / 2;
+        sX = (int)(menuFace.getWidth())/ 4;
         sY = (int)(menuFace.getHeight() / 4);
-
-        g2d.setFont(greetingsFont);
+        g2d.setFont(TitleFont);
         g2d.drawString(INSTRUCTIONS,sX,sY);
+
+        int tY;
+
+        tY = (int)(sY + 50);
+        g2d.setFont(instructionsFont);
+        g2d.drawString(INSTRUCTIONS1,5,tY);
+
+        int uY;
+        uY = tY + 25;
+        g2d.drawString(INSTRUCTIONS2, 5, uY);
+
+        int vY;
+        vY = uY + 25;
+        g2d.drawString(INSTRUCTIONS3, 5, vY);
+
 
 
 
@@ -150,8 +163,8 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
 
         g2d.setFont(buttonFont);
 
-        int x = (menuFace.width - backButton.width) / 2;
-        int y =(int) ((menuFace.height - backButton.height) * 0.65);
+        int x = 10;
+        int y =(int) ((menuFace.height - backButton.height) * 0.95);
 
         backButton.setLocation(x,y);
 
@@ -185,13 +198,20 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
+    public void mousePressed(MouseEvent mouseEvent) {
+        Point p = mouseEvent.getPoint();
+        if(backButton.contains(p)){
+            backClicked = true;
+            repaint(backButton.x,backButton.y,backButton.width+1,backButton.height+1);
+        }
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
+    public void mouseReleased(MouseEvent mouseEvent) {
+        if(backClicked ){
+            backClicked = false;
+            repaint(backButton.x,backButton.y,backButton.width+1,backButton.height+1);
+        }
     }
 
     @Override
@@ -210,7 +230,12 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent mouseEvent) {
+        Point p = mouseEvent.getPoint();
+        if(backButton.contains(p))
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        else
+            this.setCursor(Cursor.getDefaultCursor());
 
     }
 }

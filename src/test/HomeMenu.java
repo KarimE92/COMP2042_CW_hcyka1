@@ -44,6 +44,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     private static final int BORDER_SIZE = 5;
     private static final float[] DASHES = {12,6};
 
+
     private Rectangle menuFace;
     private Rectangle startButton;
     private Rectangle exitButton;
@@ -132,9 +133,6 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
     private void drawContainer(Graphics2D g2d){
         Color prev = g2d.getColor();
-
-        g2d.setColor(BG_COLOR);
-        g2d.fill(menuFace);
 
         Stroke tmp = g2d.getStroke();
 
