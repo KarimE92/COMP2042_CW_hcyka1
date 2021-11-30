@@ -293,6 +293,9 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
             System.out.println("Goodbye " + System.getProperty("user.name"));
             System.exit(0);
         }
+        else if(infoButton.contains(p)){
+            System.out.println("Load the info page that hasn't been created yet");
+        }
     }
 
     @Override
@@ -307,6 +310,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
             exitClicked = true;
             repaint(exitButton.x,exitButton.y,exitButton.width+1,exitButton.height+1);
         }
+        else if(infoButton.contains(p)){
+            infoClicked = true;
+            repaint(infoButton.x,infoButton.y,infoButton.width+1,infoButton.height+1);
+        }
     }
 
     @Override
@@ -318,6 +325,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         else if(exitClicked){
             exitClicked = false;
             repaint(exitButton.x,exitButton.y,exitButton.width+1,exitButton.height+1);
+        }
+        else if(infoClicked){
+            infoClicked = false;
+            repaint(infoButton.x,infoButton.y,infoButton.width+1,infoButton.height+1);
         }
     }
 
@@ -340,7 +351,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
-        if(startButton.contains(p) || exitButton.contains(p))
+        if(startButton.contains(p) || exitButton.contains(p) || infoButton.contains(p))
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         else
             this.setCursor(Cursor.getDefaultCursor());
