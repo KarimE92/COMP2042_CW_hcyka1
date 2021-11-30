@@ -35,12 +35,9 @@ public class DebugPanel extends JPanel {
     private JSlider ballXSpeed;
     private JSlider ballYSpeed;
 
-    private Wall wall;
-    private Game_Model gameModel;
 
     public DebugPanel(Game_Model gameModel){
 
-        this.gameModel = gameModel;
         initialize();
 
         skipLevel = makeButton("Skip Level",e -> gameModel.wall.nextLevel());

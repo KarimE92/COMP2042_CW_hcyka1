@@ -91,10 +91,18 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
     public void keyPressed(KeyEvent keyEvent) {
         switch(keyEvent.getKeyCode()){
             case KeyEvent.VK_A:
-                gameModel.player.moveLeft();
+                if (keyEvent.isShiftDown()){
+                    gameModel.player.sprintLeft();
+                }else {
+                    gameModel.player.moveLeft();
+                }
                 break;
             case KeyEvent.VK_D:
-                gameModel.player.movRight();
+                if (keyEvent.isShiftDown()){
+                    gameModel.player.sprintRight();
+                }else {
+                    gameModel.player.moveRight();
+                }
                 break;
             case KeyEvent.VK_ESCAPE:
                 showPauseMenu = !showPauseMenu;

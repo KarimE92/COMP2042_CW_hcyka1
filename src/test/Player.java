@@ -29,6 +29,7 @@ public class Player {
     public static final Color INNER_COLOR = Color.GREEN;
 
     private static final int DEF_MOVE_AMOUNT = 5;
+    private static final int DEF_SPRINT_AMOUNT = 10;
 
     private Rectangle playerFace;
     private Point ballPoint;
@@ -67,9 +68,13 @@ public class Player {
         moveAmount = -DEF_MOVE_AMOUNT;
     }
 
-    public void movRight(){
+    public void sprintLeft(){moveAmount = -DEF_SPRINT_AMOUNT;}
+
+    public void moveRight(){
         moveAmount = DEF_MOVE_AMOUNT;
     }
+
+    public void sprintRight(){moveAmount = DEF_SPRINT_AMOUNT;}
 
     public void stop(){
         moveAmount = 0;
