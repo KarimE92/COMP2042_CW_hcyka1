@@ -36,14 +36,14 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     private static final String INFO_TEXT = "Info";
 
     private static final Color BG_COLOR = Color.GREEN.darker();
-    private static final Color BORDER_COLOR = new Color(200,8,21); //Venetian Red
-    private static final Color DASH_BORDER_COLOR = new  Color(255, 216, 0);//school bus yellow
-    private static final Color TEXT_COLOR = new Color(16, 52, 166);//egyptian blue
+    private static final Color TEXT_COLOR = new Color(255, 0, 0);//egyptian blue
     private static final Color CLICKED_BUTTON_COLOR = BG_COLOR.brighter();
     private static final Color CLICKED_TEXT = Color.WHITE;
     private static final int BORDER_SIZE = 5;
     private static final float[] DASHES = {12,6};
 
+    Toolkit t=Toolkit.getDefaultToolkit();
+    private Image Title_Image = t.getImage("src/test/Title_Image.jpg");
 
     private Rectangle menuFace;
     private Rectangle startButton;
@@ -51,8 +51,6 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     private Rectangle infoButton;
 
 
-    private BasicStroke borderStoke;
-    private BasicStroke borderStoke_noDashes;
 
     private Font greetingsFont;
     private Font gameTitleFont;
@@ -86,15 +84,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         exitButton = new Rectangle(btnDim);
         infoButton = new Rectangle(btnDim);
 
-        borderStoke = new BasicStroke(BORDER_SIZE,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,0,DASHES,0);
-        borderStoke_noDashes = new BasicStroke(BORDER_SIZE,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND);
-
         greetingsFont = new Font("Noto Mono",Font.PLAIN,25);
         gameTitleFont = new Font("Noto Mono",Font.BOLD,40);
         creditsFont = new Font("Monospaced",Font.PLAIN,10);
         buttonFont = new Font("Monospaced",Font.PLAIN,startButton.height-2);
-
-
 
     }
 
@@ -106,47 +99,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
     public void drawMenu(Graphics2D g2d){
 
-        drawContainer(g2d);
+        g2d.drawImage(Title_Image, 1, 1, (int)(menuFace.getWidth()), (int)(menuFace.getHeight()), this);
 
-        /*
-        all the following method calls need a relative
-        painting directly into the HomeMenu rectangle,
-        so the translation is made here so the other methods do not do that.
-         */
-        Color prevColor = g2d.getColor();
-        Font prevFont = g2d.getFont();
-
-        double x = menuFace.getX();
-        double y = menuFace.getY();
-
-        g2d.translate(x,y);
-
-        //methods calls
         drawText(g2d);
         drawButton(g2d);
-        //end of methods calls
-
-        g2d.translate(-x,-y);
-        g2d.setFont(prevFont);
-        g2d.setColor(prevColor);
-    }
-
-    private void drawContainer(Graphics2D g2d){
-        Color prev = g2d.getColor();
-
-        Stroke tmp = g2d.getStroke();
-
-        g2d.setStroke(borderStoke_noDashes);
-        g2d.setColor(DASH_BORDER_COLOR);
-        g2d.draw(menuFace);
-
-        g2d.setStroke(borderStoke);
-        g2d.setColor(BORDER_COLOR);
-        g2d.draw(menuFace);
-
-        g2d.setStroke(tmp);
-
-        g2d.setColor(prev);
     }
 
     private void drawText(Graphics2D g2d){
