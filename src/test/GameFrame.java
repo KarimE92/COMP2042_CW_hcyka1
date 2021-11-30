@@ -21,7 +21,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-
+import java.io.File;
 
 public class GameFrame extends JFrame implements WindowFocusListener {
 
@@ -33,10 +33,13 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
     public GameFrame(){
         super();
-        setResizable(false); //temporarily there since there's a bug with resizing the game
+        setResizable(false); //the game is not resizable
         gaming = false;
 
         this.setLayout(new BorderLayout());
+
+        //loading the highscore savefile
+        File HighScoreSave = new File("savefile.txt");
 
         gameBoard = new Game_Controller(this);
 
