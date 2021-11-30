@@ -21,30 +21,34 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-
+import java.io.File;
 
 public class GameFrame extends JFrame implements WindowFocusListener {
 
     private static final String DEF_TITLE = "Brick Destroy";
-
+    private InfoMenu InfoMenu;
     public Game_Controller gameBoard;
     private HomeMenu homeMenu;
     private boolean gaming;
 
     public GameFrame(){
         super();
-        setResizable(false); //temporarily there since there's a bug with resizing the game
+        setResizable(false); //the game is not resizable
         gaming = false;
 
         this.setLayout(new BorderLayout());
 
+        //loading the highscore savefile
+        File HighScoreSave = new File("savefile.txt");
+
         gameBoard = new Game_Controller(this);
 
-        homeMenu = new HomeMenu(this,new Dimension(450,300));
+        homeMenu = new HomeMenu(this,new Dimension(600,450));
 
+        InfoMenu = new InfoMenu(this, new Dimension(600, 450));
         this.add(homeMenu,BorderLayout.CENTER);
 
-        this.setUndecorated(true);
+        this.setUndecorated(false);
 
 
     }
@@ -68,6 +72,21 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
     }
 
+    public void enableInfoMenu(){
+        this.dispose();
+        this.remove(homeMenu);
+        this.add(InfoMenu,BorderLayout.CENTER);
+        this.setUndecorated(false);
+        initialize();
+    }
+
+    public void enableHomeMenu(){
+        this.dispose();
+        this.remove(InfoMenu);
+        this.add(homeMenu,BorderLayout.CENTER);
+        this.setUndecorated(false);
+        initialize();
+    }
     private void autoLocate(){
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (size.width - this.getWidth()) / 2;
