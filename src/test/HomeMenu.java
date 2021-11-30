@@ -294,7 +294,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
             System.exit(0);
         }
         else if(infoButton.contains(p)){
-            System.out.println("Load the info page that hasn't been created yet");
+            owner.enableInfoMenu();
         }
     }
 
