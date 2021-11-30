@@ -254,7 +254,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         x = startButton.x;
         y = startButton.y;
 
-        y *= 1.2;
+        y *= 1.4;
 
         infoButton.setLocation(x,y);
 
@@ -265,7 +265,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
 
         x += infoButton.x;
-        y += infoButton.y + (exitButton.height * 0.9 * 2);
+        y += infoButton.y + (exitButton.height * 0.5);
 
         if(infoClicked){
             Color tmp = g2d.getColor();
