@@ -22,6 +22,8 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
+import java.io.IOException;
+
 
 public class GameFrame extends JFrame implements WindowFocusListener {
 
@@ -39,7 +41,17 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.setLayout(new BorderLayout());
 
         //loading the highscore savefile
-        File HighScoreSave = new File("savefile.txt");
+        try {
+            File SaveFile = new File("SaveFile.txt");
+            if (SaveFile.createNewFile()) {
+                System.out.println("File created: " + SaveFile.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
 
         gameBoard = new Game_Controller(this);
 
