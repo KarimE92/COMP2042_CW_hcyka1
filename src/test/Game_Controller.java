@@ -20,8 +20,10 @@ package test;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
-
+import java.io.FileWriter;
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Game_Controller extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
 
@@ -59,6 +61,26 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                     gameModel.wall.wallReset();
                     gameModel.resetBallCount();
                     GameView.setmessage("Game Over");
+                    try {
+                        File SaveFile = new File("SaveFile.txt");
+                        System.out.println("File Opened");
+                        Scanner myReader = new Scanner(SaveFile);
+                        while(myReader.hasNextLine()){
+                            System.out.println("Reading Line:");
+                            int data = myReader.nextInt();
+                            if (gameModel.GetScore() > data){
+                                FileWriter myWriter = new FileWriter(SaveFile.getName());
+                                myWriter.write(String.valueOf(gameModel.GetScore()));
+                                myWriter.close();
+                                System.out.println("Successfully wrote to the file.");
+                                break;
+                            }
+                        }
+
+                    } catch (IOException f) {
+                        System.out.println("An error occurred.");
+                        f.printStackTrace();
+                    }
                     gameModel.ResetScore(); //just resetting the score. Ideally we would parse a text file and check if the current score exceeds any scores on the text file and replace them
                 }
                 gameModel.LevelReset();
@@ -144,6 +166,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
         }
         else if(GameView.getrestartButtonRect().contains(p)){
             GameView.setmessage("Restarting Game...");
+            gameModel.ResetScore();
             gameModel.LevelReset();
             gameModel.wall.wallReset();
             showPauseMenu = false;

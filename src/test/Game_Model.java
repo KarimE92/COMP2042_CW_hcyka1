@@ -139,6 +139,7 @@ public class Game_Model {
 
         ball.setSpeed(speedX,speedY);
         ballLost = false;
+
     }
 
 
