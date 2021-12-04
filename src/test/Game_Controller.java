@@ -20,6 +20,7 @@ package test;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.File;
 import java.io.IOException;
@@ -65,17 +66,31 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                         File SaveFile = new File("SaveFile.txt");
                         System.out.println("File Opened");
                         Scanner myReader = new Scanner(SaveFile);
-                        while(myReader.hasNextLine()){
+                        int[] data = {0,0,0};
                             System.out.println("Reading Line:");
-                            int data = myReader.nextInt();
-                            if (gameModel.GetScore() > data){
-                                FileWriter myWriter = new FileWriter(SaveFile.getName());
-                                myWriter.write(String.valueOf(gameModel.GetScore()));
-                                myWriter.close();
-                                System.out.println("Successfully wrote to the file.");
-                                break;
+                            for (int i = 0; i<3; i++) { //adding all the highscores to a list
+                                data[i] = myReader.nextInt();
                             }
-                        }
+                            myReader.close();
+                            int score = gameModel.GetScore();
+                            int temp;
+                            for (int j =0; j<3; j++) { //checking if our current score is higher than the highscores in the file
+                                if (score >= data[j]) {
+                                    temp = data[j];
+                                    data[j] = score;
+                                    score = temp;
+                                }
+                            }
+                                FileWriter myWriter = new FileWriter(SaveFile.getName());
+                                BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
+                                for(int k=0; k<3; k++) {
+                                    myBufferedWriter.write(String.valueOf(data[k]));
+                                    myBufferedWriter.newLine();
+                                }
+                                myBufferedWriter.close();
+                                System.out.println("Successfully wrote to the file.");
+
+
 
                     } catch (IOException f) {
                         System.out.println("An error occurred.");
