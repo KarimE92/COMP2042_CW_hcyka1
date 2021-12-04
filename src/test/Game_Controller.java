@@ -52,12 +52,14 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
         gameTimer = new Timer(10,e ->{
             gameModel.move();
             gameModel.findImpacts();
-            GameView.setmessage(String.format("Bricks: %d Balls %d", gameModel.wall.getBrickCount(), gameModel.getBallCount()));
+            GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", gameModel.wall.getBrickCount(), gameModel.getBallCount(), gameModel.GetScore()));
             if(gameModel.isBallLost()){
                 if(gameModel.ballEnd()){
+                    //save the high score if it's above any currently existing high scores, and add their high score if there is none, and reset the score variable to zero
                     gameModel.wall.wallReset();
                     gameModel.resetBallCount();
                     GameView.setmessage("Game Over");
+                    gameModel.ResetScore(); //just resetting the score. Ideally we would parse a text file and check if the current score exceeds any scores on the text file and replace them
                 }
                 gameModel.LevelReset();
                 gameTimer.stop();
@@ -148,6 +150,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
             GameView.updatescreen(this);
         }
         else if(GameView.getexitButtonRect().contains(p)){
+            //Save the game (including the high score before exiting the game
             System.exit(0);
         }
 

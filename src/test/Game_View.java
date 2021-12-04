@@ -17,7 +17,7 @@ public class Game_View extends JComponent {
     private static final Color MENU_COLOR = new Color(0, 255, 0); //pause menu colour
     private int strLen;
 
-    private Game_Controller Board;
+    private Game_Controller Controller;
 
     private static final int DEF_WIDTH = 600;
     int getwidth(){return DEF_WIDTH;}
@@ -37,7 +37,7 @@ public class Game_View extends JComponent {
 
 
     protected Game_View(Game_Controller GameBoard) {
-        Board = GameBoard;
+        Controller = GameBoard;
         strLen = 0;
         message = "Press Spacebar to Start!";
         menuFont = new Font("Monospaced",Font.PLAIN,TEXT_SIZE);
@@ -51,7 +51,8 @@ public class Game_View extends JComponent {
     }
 
     public void updatescreen(Game_Controller GameBoard){
-        this.Board = GameBoard;
+        this.Controller = GameBoard;
+        this.Controller.getGame().IncrementScore((int)(this.Controller.getGame().ball.getSpeedX()));
         repaint();
     }
     public void paint(Graphics g){
@@ -63,15 +64,15 @@ public class Game_View extends JComponent {
         g2d.setColor(Color.BLUE);
         g2d.drawString(message,250,225);
 
-        drawBall(Board.getGame().ball,g2d);
+        drawBall(Controller.getGame().ball,g2d);
 
-        for(Brick b : Board.getGame().wall.bricks)
+        for(Brick b : Controller.getGame().wall.bricks)
             if(!b.isBroken())
                 drawBrick(b,g2d);
 
-        drawPlayer(Board.getGame().player,g2d);
+        drawPlayer(Controller.getGame().player,g2d);
 
-        if(Board.getpausemenu())
+        if(Controller.getpausemenu())
             drawMenu(g2d);
 
         Toolkit.getDefaultToolkit().sync();

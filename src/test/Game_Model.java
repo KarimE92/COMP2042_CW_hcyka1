@@ -22,6 +22,14 @@ public class Game_Model {
     Wall wall;
     private int ballCount;
     private boolean ballLost;
+    private int Score;
+    public void IncrementScore(int value){
+        Score += Math.abs(value);
+    }
+    public void ResetScore(){
+        Score = 0;
+    }
+    public int GetScore(){return Score;}
 
 
     protected Game_Model(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {
@@ -66,7 +74,14 @@ public class Game_Model {
              * because for every brick program checks for horizontal and vertical impacts
              */
             wall.BrickCollision();
+            for(Brick b : wall.bricks) {
+                if (b.findImpact(ball) != 0) {
+                    IncrementScore(b.GetScore());
+                    b.SetScore();
+                }
+            }
         }
+
         else if(impactBorder()) {
             ball.reverseX();
         }
@@ -84,6 +99,9 @@ public class Game_Model {
                 //Vertical Impact
                 case Brick.UP_IMPACT:
                     ball.reverseY();
+                    if (b.isBroken()){
+
+                    }
                     return b.setImpact(ball.down, Brick.Crack.UP);
                 case Brick.DOWN_IMPACT:
                     ball.reverseY();
