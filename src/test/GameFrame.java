@@ -42,8 +42,6 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
         this.setLayout(new BorderLayout());
 
-        //loading the highscore savefile
-
         gameBoard = new Game_Controller(this);
 
         homeMenu = new HomeMenu(this,new Dimension(600,450));

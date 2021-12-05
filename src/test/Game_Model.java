@@ -17,6 +17,9 @@ public class Game_Model {
 
     private Random rnd;
     private Rectangle area;
+    private int bricknum;
+    private int linenum;
+    private double brickdimension;
     Ball ball;
     Player player;
     Wall wall;
@@ -37,7 +40,12 @@ public class Game_Model {
     boolean gethighscoremenu(){return highscoremenu;}
     void toggleHighscoremenu(){highscoremenu = !(highscoremenu);}
 
+    void refreshWall(){
+        for(Brick b : wall.bricks){
+            b.ResetScore();
+        }
 
+    }
     protected Game_Model(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {
 
         this.startPoint = new Point(ballPos);
@@ -52,6 +60,10 @@ public class Game_Model {
         wall = new Wall(drawArea,brickCount,lineCount,brickDimensionRatio);
 
         area = drawArea;
+        bricknum = brickCount;
+        linenum = lineCount;
+        brickdimension = brickDimensionRatio;
+
 
         LevelReset();
         //create wall of bricks

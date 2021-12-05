@@ -93,6 +93,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                     gameModel.wall.wallReset();
                     gameModel.resetBallCount();
                     GameView.setmessage("Game Over");
+                    gameModel.refreshWall();
                     try {
                         highscorelist = gethighscorelist();
                             int score = gameModel.GetScore();
@@ -208,6 +209,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
             GameView.setmessage("Restarting Game...");
             gameModel.ResetScore();
             gameModel.LevelReset();
+            gameModel.refreshWall();
             gameModel.wall.wallReset();
             showPauseMenu = false;
             GameView.updatescreen(this);

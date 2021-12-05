@@ -36,7 +36,7 @@ public class SteelBrick extends Brick {
 
     public SteelBrick(Point point, Dimension size){
         super(NAME,point,size,DEF_BORDER,DEF_INNER,STEEL_STRENGTH);
-        Score = Steel_Points;
+        ResetScore();
         rnd = new Random();
         brickFace = super.brickFace;
     }
@@ -64,5 +64,6 @@ public class SteelBrick extends Brick {
             super.impact();
         }
     }
-
+    @Override
+    public void ResetScore(){Score = Steel_Points;}
 }

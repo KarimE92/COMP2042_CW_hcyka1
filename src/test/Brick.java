@@ -25,7 +25,6 @@ abstract public class Brick  {
     public int GetScore(){return Score;}
     public void SetScore(){Score =0;}
 
-
     public class Crack{
 
         private static final int CRACK_SECTIONS = 3;
@@ -253,8 +252,7 @@ abstract public class Brick  {
         broken = (strength == 0);
     }
 
-
-
+    public void ResetScore(){}
 }
 
 

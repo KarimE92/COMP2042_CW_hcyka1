@@ -20,7 +20,7 @@ public class CementBrick extends Brick {
 
     public CementBrick(Point point, Dimension size){
         super(NAME,point,size,DEF_BORDER,DEF_INNER,CEMENT_STRENGTH);
-        Score = Cement_Points;
+        ResetScore();
         crack = new Crack(DEF_CRACK_DEPTH,DEF_STEPS);
         brickFace = super.brickFace;
     }
@@ -62,4 +62,7 @@ public class CementBrick extends Brick {
         crack.reset();
         brickFace = super.brickFace;
     }
+
+    @Override
+    public void ResetScore(){Score = Cement_Points;}
 }
