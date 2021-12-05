@@ -43,24 +43,6 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.setLayout(new BorderLayout());
 
         //loading the highscore savefile
-        try {
-            File SaveFile = new File("SaveFile.txt");
-            if (SaveFile.createNewFile()) {
-                System.out.println("File created: " + SaveFile.getName());
-                FileWriter myWriter = new FileWriter(SaveFile.getName());
-                BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
-                for(int i=1; i<4; i++) {
-                    myBufferedWriter.write("0 ");
-                    myBufferedWriter.newLine();
-                }
-                myBufferedWriter.close();
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
 
         gameBoard = new Game_Controller(this);
 

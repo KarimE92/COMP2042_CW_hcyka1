@@ -22,6 +22,8 @@ public class Game_Model {
     Wall wall;
     private int ballCount;
     private boolean ballLost;
+    private static final int ScoreLength = 5;
+    int getScoreLength(){return ScoreLength;}
     private int Score;
     public void IncrementScore(int value){
         Score += Math.abs(value);
@@ -30,6 +32,10 @@ public class Game_Model {
         Score = 0;
     }
     public int GetScore(){return Score;}
+
+    boolean highscoremenu;
+    boolean gethighscoremenu(){return highscoremenu;}
+    void toggleHighscoremenu(){highscoremenu = !(highscoremenu);}
 
 
     protected Game_Model(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {

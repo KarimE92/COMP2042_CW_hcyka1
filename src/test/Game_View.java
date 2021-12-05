@@ -3,6 +3,7 @@ package test;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
+import java.io.FileNotFoundException;
 
 public class Game_View extends JComponent {
 
@@ -73,7 +74,15 @@ public class Game_View extends JComponent {
         drawPlayer(Controller.getGame().player,g2d);
 
         if(Controller.getpausemenu())
-            drawMenu(g2d);
+            drawPauseMenu(g2d);
+
+        if(Controller.getGame().gethighscoremenu()) {
+            try {
+                drawHighScore(g2d);
+            } catch (FileNotFoundException e) {
+                System.out.println("Error!");
+            }
+        }
 
         Toolkit.getDefaultToolkit().sync();
     }
@@ -118,12 +127,29 @@ public class Game_View extends JComponent {
         g2d.setColor(tmp);
     }
 
-    private void drawMenu(Graphics2D g2d){
-        obscureGameBoard(g2d);
-        drawPauseMenu(g2d);
-    }
 
+
+    private void drawHighScore(Graphics2D g2d) throws FileNotFoundException {
+        obscureGameBoard(g2d);
+        g2d.setFont(menuFont);
+        g2d.setColor(MENU_COLOR);
+
+        int[] highscores = Controller.gethighscorelist();
+
+        int x = (this.getWidth() - strLen) / 3;
+        int y = this.getHeight() / 10;
+
+        g2d.drawString("High Scores:", x, y);
+        x = (this.getWidth() - strLen) / 4;
+        y+=100;
+        for(int i=0; i< Controller.getGame().getScoreLength(); i++){
+            g2d.drawString(String.valueOf(highscores[i]), x, y);
+            y+=50;
+        }
+
+    }
     private void drawPauseMenu(Graphics2D g2d){
+        obscureGameBoard(g2d);
         Font tmpFont = g2d.getFont();
         Color tmpColor = g2d.getColor();
 

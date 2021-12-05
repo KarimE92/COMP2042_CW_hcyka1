@@ -20,10 +20,7 @@ package test;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class Game_Controller extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
@@ -41,6 +38,22 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
 
     private DebugConsole debugConsole;
 
+    int[] highscorelist;
+    int[] gethighscorelist() throws FileNotFoundException {
+        int[] data = new int[gameModel.getScoreLength()];
+        try {
+            File SaveFile = new File("SaveFile.txt");
+            Scanner myReader = new Scanner(SaveFile);
+            for (int i = 0; i < gameModel.getScoreLength(); i++) { //adding all the highscores to a list
+                data[i] = myReader.nextInt();
+            }
+            myReader.close();
+        }catch (IOException f) {
+            System.out.println("An error occurred.");
+            f.printStackTrace();
+        }
+        return data;
+    }
     public Game_Controller(JFrame owner){
         super();
         showPauseMenu = false;
@@ -48,7 +61,25 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
         gameModel = new Game_Model(new Rectangle(0,0,GameView.getwidth(),GameView.getheight()),30,4,6/2,new Point(300,430));
 
         debugConsole = new DebugConsole(owner, gameModel,this);
-
+        //creating a savefile if it doesn't already exist
+        try {
+            File SaveFile = new File("SaveFile.txt");
+            if (SaveFile.createNewFile()) {
+                System.out.println("File created: " + SaveFile.getName());
+                FileWriter myWriter = new FileWriter(SaveFile.getName());
+                BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
+                for(int i=0; i<gameModel.getScoreLength(); i++) {
+                    myBufferedWriter.write("0 ");
+                    myBufferedWriter.newLine();
+                }
+                myBufferedWriter.close();
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
         //initialize the first level
         gameModel.wall.nextLevel();
 
@@ -63,39 +94,30 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                     gameModel.resetBallCount();
                     GameView.setmessage("Game Over");
                     try {
-                        File SaveFile = new File("SaveFile.txt");
-                        System.out.println("File Opened");
-                        Scanner myReader = new Scanner(SaveFile);
-                        int[] data = {0,0,0};
-                            System.out.println("Reading Line:");
-                            for (int i = 0; i<3; i++) { //adding all the highscores to a list
-                                data[i] = myReader.nextInt();
-                            }
-                            myReader.close();
+                        highscorelist = gethighscorelist();
                             int score = gameModel.GetScore();
                             int temp;
-                            for (int j =0; j<3; j++) { //checking if our current score is higher than the highscores in the file
-                                if (score >= data[j]) {
-                                    temp = data[j];
-                                    data[j] = score;
+                            for (int j =0; j<gameModel.getScoreLength(); j++) { //checking if our current score is higher than the highscores in the file
+                                if (score >= highscorelist[j]) {
+                                    temp = highscorelist[j];
+                                    highscorelist[j] = score;
                                     score = temp;
                                 }
                             }
-                                FileWriter myWriter = new FileWriter(SaveFile.getName());
+                                FileWriter myWriter = new FileWriter("SaveFile.txt");
                                 BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
-                                for(int k=0; k<3; k++) {
-                                    myBufferedWriter.write(String.valueOf(data[k]));
+                                for(int k=0; k<gameModel.getScoreLength(); k++) {
+                                    myBufferedWriter.write(String.valueOf(highscorelist[k]));
                                     myBufferedWriter.newLine();
                                 }
                                 myBufferedWriter.close();
-                                System.out.println("Successfully wrote to the file.");
-
 
 
                     } catch (IOException f) {
                         System.out.println("An error occurred.");
                         f.printStackTrace();
                     }
+                    gameModel.toggleHighscoremenu();
                     gameModel.ResetScore(); //just resetting the score. Ideally we would parse a text file and check if the current score exceeds any scores on the text file and replace them
                 }
                 gameModel.LevelReset();
@@ -150,7 +172,10 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                 break;
             case KeyEvent.VK_SPACE:
                 if(!showPauseMenu)
-                    if(gameTimer.isRunning()) {
+                    if(gameModel.gethighscoremenu()){
+                        gameModel.toggleHighscoremenu();
+                        GameView.updatescreen(this);
+                    }else if(gameTimer.isRunning()) {
                         gameTimer.stop();
 
                     }else{
