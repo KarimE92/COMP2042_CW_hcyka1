@@ -17,13 +17,35 @@ public class Game_Model {
 
     private Random rnd;
     private Rectangle area;
+    private int bricknum;
+    private int linenum;
+    private double brickdimension;
     Ball ball;
     Player player;
     Wall wall;
     private int ballCount;
     private boolean ballLost;
+    private static final int ScoreLength = 5;
+    int getScoreLength(){return ScoreLength;}
+    private int Score;
+    public void IncrementScore(int value){
+        Score += Math.abs(value);
+    }
+    public void ResetScore(){
+        Score = 0;
+    }
+    public int GetScore(){return Score;}
 
+    boolean highscoremenu;
+    boolean gethighscoremenu(){return highscoremenu;}
+    void toggleHighscoremenu(){highscoremenu = !(highscoremenu);}
 
+    void refreshWall(){
+        for(Brick b : wall.bricks){
+            b.ResetScore();
+        }
+
+    }
     protected Game_Model(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {
 
         this.startPoint = new Point(ballPos);
@@ -38,6 +60,10 @@ public class Game_Model {
         wall = new Wall(drawArea,brickCount,lineCount,brickDimensionRatio);
 
         area = drawArea;
+        bricknum = brickCount;
+        linenum = lineCount;
+        brickdimension = brickDimensionRatio;
+
 
         LevelReset();
         //create wall of bricks
@@ -66,7 +92,14 @@ public class Game_Model {
              * because for every brick program checks for horizontal and vertical impacts
              */
             wall.BrickCollision();
+            for(Brick b : wall.bricks) {
+                if (b.findImpact(ball) != 0) {
+                    IncrementScore(b.GetScore());
+                    b.SetScore();
+                }
+            }
         }
+
         else if(impactBorder()) {
             ball.reverseX();
         }
@@ -84,6 +117,9 @@ public class Game_Model {
                 //Vertical Impact
                 case Brick.UP_IMPACT:
                     ball.reverseY();
+                    if (b.isBroken()){
+
+                    }
                     return b.setImpact(ball.down, Brick.Crack.UP);
                 case Brick.DOWN_IMPACT:
                     ball.reverseY();
@@ -121,6 +157,7 @@ public class Game_Model {
 
         ball.setSpeed(speedX,speedY);
         ballLost = false;
+
     }
 
 

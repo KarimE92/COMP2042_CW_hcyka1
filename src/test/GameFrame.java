@@ -22,6 +22,10 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
+
 
 public class GameFrame extends JFrame implements WindowFocusListener {
 
@@ -37,9 +41,6 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         gaming = false;
 
         this.setLayout(new BorderLayout());
-
-        //loading the highscore savefile
-        File HighScoreSave = new File("savefile.txt");
 
         gameBoard = new Game_Controller(this);
 

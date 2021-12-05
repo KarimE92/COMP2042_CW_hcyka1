@@ -21,7 +21,9 @@ abstract public class Brick  {
     public static final int LEFT_IMPACT = 300;
     public static final int RIGHT_IMPACT = 400;
 
-
+    int Score;
+    public int GetScore(){return Score;}
+    public void SetScore(){Score =0;}
 
     public class Crack{
 
@@ -221,8 +223,9 @@ abstract public class Brick  {
 
 
     public final int findImpact(Ball b){
-        if(broken)
-            return 0;
+        if(broken) {
+            return 10;
+        }
         int out  = 0;
         if(brickFace.contains(b.right))
             out = LEFT_IMPACT;
@@ -249,8 +252,7 @@ abstract public class Brick  {
         broken = (strength == 0);
     }
 
-
-
+    public void ResetScore(){}
 }
 
 

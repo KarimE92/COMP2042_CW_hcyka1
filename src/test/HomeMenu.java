@@ -39,8 +39,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     private static final Color TEXT_COLOR = new Color(255, 0, 0);//egyptian blue
     private static final Color CLICKED_BUTTON_COLOR = BG_COLOR.brighter();
     private static final Color CLICKED_TEXT = Color.WHITE;
-    private static final int BORDER_SIZE = 5;
-    private static final float[] DASHES = {12,6};
+
 
     Toolkit t=Toolkit.getDefaultToolkit();
     private Image Title_Image = t.getImage("src/test/Title_Image.jpg");
