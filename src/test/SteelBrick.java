@@ -65,5 +65,5 @@ public class SteelBrick extends Brick {
         }
     }
     @Override
-    public void ResetScore(){Score = Steel_Points;}
+    public void MakeScore(){Score = Steel_Points;}
 }

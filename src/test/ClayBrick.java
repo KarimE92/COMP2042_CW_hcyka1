@@ -38,5 +38,5 @@ public class ClayBrick extends Brick {
     }
 
     @Override
-    public void ResetScore(){Score = Clay_Points;}
+    public void MakeScore(){Score = Clay_Points;}
 }

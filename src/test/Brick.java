@@ -252,7 +252,10 @@ abstract public class Brick  {
         broken = (strength == 0);
     }
 
-    public void ResetScore(){}
+    public void ResetScore(){
+        MakeScore();
+    }
+    public void MakeScore(){}
 }
 
 

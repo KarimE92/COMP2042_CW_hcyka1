@@ -64,5 +64,5 @@ public class CementBrick extends Brick {
     }
 
     @Override
-    public void ResetScore(){Score = Cement_Points;}
+    public void MakeScore(){Score = Cement_Points;}
 }
