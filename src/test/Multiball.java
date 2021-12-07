@@ -48,5 +48,12 @@ public class Multiball extends Powerup{
         }
             return false;
     }
+
+    @Override
+    public void resetFace(Point2D point){
+        multiFace = makePowerup(point);
+    }
+
+
 }
 

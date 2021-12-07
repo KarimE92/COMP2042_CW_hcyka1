@@ -29,12 +29,12 @@ public class Wall {
     private static final int STEEL = 2;
     private static final int CEMENT = 3;
 
-
-
+    private Multiball multiball;
+    Multiball getMultiball(){return multiball;}
     Brick[] bricks;
 
     private Brick[][] levels;
-    private int level;
+    private int currentlevel;
 
 
     private int brickCount;
@@ -138,6 +138,7 @@ public class Wall {
         Level[1] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
         Level[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,STEEL);
         Level[3] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
+        multiball = new Multiball();
         return Level;
     }
 
@@ -156,12 +157,26 @@ public class Wall {
     }
 
     public void nextLevel(){
-        bricks = levels[level++];
+        bricks = levels[currentlevel++];
         brickCount = bricks.length;
+        multiball.resetPowerup();
+        if(!multiball.getshowmulti()){
+            multiball.setshowmulti();
+        }
     }
 
+    public void resetLevel(){
+        wallReset();
+        currentlevel = 0;
+        bricks = levels[currentlevel];
+        System.out.println("Resetting level...");
+        multiball.resetPowerup();
+        if(!multiball.getshowmulti()){
+            multiball.setshowmulti();
+        }
+    }
     public boolean hasLevel(){
-        return level < levels.length;
+        return currentlevel < levels.length;
     }
 
     public void wallReset(){

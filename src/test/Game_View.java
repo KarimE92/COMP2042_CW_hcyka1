@@ -66,8 +66,8 @@ public class Game_View extends JComponent {
         g2d.drawString(message,250,225);
 
         drawBall(Controller.getGame().ball,g2d);
-        if(Controller.getGame().multiball.getshowmulti()) {
-            drawMulti(Controller.getGame().getmultipowerup(), g2d);
+        if(Controller.getGame().wall.getMultiball().getshowmulti()) {
+            drawMulti(Controller.getGame().wall.getMultiball(), g2d);
         }
 
         for(Brick b : Controller.getGame().wall.bricks)

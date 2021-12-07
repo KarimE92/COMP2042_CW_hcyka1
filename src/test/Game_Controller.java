@@ -93,6 +93,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                     gameModel.wall.wallReset();
                     gameModel.resetBallCount();
                     GameView.setmessage("Game Over");
+                    gameModel.wall.resetLevel();
                     gameModel.refreshWall();
                     try {
                         highscorelist = gethighscorelist();
@@ -121,14 +122,14 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                     gameModel.toggleHighscoremenu();
                     gameModel.ResetScore(); //just resetting the score. Ideally we would parse a text file and check if the current score exceeds any scores on the text file and replace them
                 }
-                gameModel.LevelReset();
+                gameModel.ResetPosition();
                 gameTimer.stop();
             }
             else if(gameModel.wall.isDone()){
                 if(gameModel.wall.hasLevel()){
                     GameView.setmessage("Go to Next Level");
                     gameTimer.stop();
-                    gameModel.LevelReset();
+                    gameModel.ResetPosition();
                     gameModel.wall.wallReset();
                     gameModel.wall.nextLevel();
                 }
@@ -208,7 +209,8 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
         else if(GameView.getrestartButtonRect().contains(p)){
             GameView.setmessage("Restarting Game...");
             gameModel.ResetScore();
-            gameModel.LevelReset();
+            gameModel.wall.resetLevel();
+            gameModel.ResetPosition();
             gameModel.refreshWall();
             gameModel.wall.wallReset();
             showPauseMenu = false;

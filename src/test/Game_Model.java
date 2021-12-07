@@ -65,10 +65,10 @@ public class Game_Model {
         bricknum = brickCount;
         linenum = lineCount;
         brickdimension = brickDimensionRatio;
-        multiball = new Multiball();
 
 
-        LevelReset();
+
+        ResetPosition();
         //create wall of bricks
         //create player
         //create ball
@@ -87,7 +87,7 @@ public class Game_Model {
 
 
     public void findImpacts(){
-        multiball.impact(ball);
+        wall.getMultiball().impact(ball);
         if(player.impact(ball)){
             ball.reverseY();
         }
@@ -148,7 +148,7 @@ public class Game_Model {
 
 
 
-    public void LevelReset(){
+    public void ResetPosition(){
         player.moveTo(startPoint);
         ball.moveTo(startPoint);
         float speedX,speedY;
