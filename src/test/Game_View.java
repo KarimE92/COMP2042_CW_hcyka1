@@ -67,6 +67,8 @@ public class Game_View extends JComponent {
 
         drawBall(Controller.getGame().ball,g2d);
 
+        drawMulti(Controller.getGame().getmultipowerup(),g2d);
+
         for(Brick b : Controller.getGame().wall.bricks)
             if(!b.isBroken())
                 drawBrick(b,g2d);
@@ -109,6 +111,20 @@ public class Game_View extends JComponent {
         g2d.fill(s);
 
         g2d.setColor(ball.getBorderColor());
+        g2d.draw(s);
+
+        g2d.setColor(tmp);
+    }
+
+    private void drawMulti(Multiball multiball,Graphics2D g2d){
+        Color tmp = g2d.getColor();
+
+        Shape s = multiball.getmultiFace();
+
+        g2d.setColor(multiball.getInnerColor());
+        g2d.fill(s);
+
+        g2d.setColor(multiball.getBorderColor());
         g2d.draw(s);
 
         g2d.setColor(tmp);

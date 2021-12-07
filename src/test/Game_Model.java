@@ -23,6 +23,8 @@ public class Game_Model {
     Ball ball;
     Player player;
     Wall wall;
+    Multiball multiball;
+    Multiball getmultipowerup(){return multiball;}
     private int ballCount;
     private boolean ballLost;
     private static final int ScoreLength = 5;
@@ -63,6 +65,7 @@ public class Game_Model {
         bricknum = brickCount;
         linenum = lineCount;
         brickdimension = brickDimensionRatio;
+        multiball = new Multiball();
 
 
         LevelReset();

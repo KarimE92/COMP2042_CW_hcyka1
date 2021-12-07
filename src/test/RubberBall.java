@@ -17,14 +17,11 @@
  */
 package test;
 
-import java.awt.*;
-import java.awt.geom.Ellipse2D;
+
 import java.awt.geom.Point2D;
 
 public class RubberBall extends Ball {
 
-
-    private static final int DEF_RADIUS = 10;
 
 
     public RubberBall(Point2D center){
