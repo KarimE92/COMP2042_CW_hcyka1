@@ -87,6 +87,7 @@ public class Game_Model {
 
 
     public void findImpacts(){
+        multiball.impact(ball);
         if(player.impact(ball)){
             ball.reverseY();
         }

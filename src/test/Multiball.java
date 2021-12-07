@@ -8,6 +8,9 @@ public class Multiball extends Powerup{
     private int radius = 16;
     private Color border;
     private Color inner;
+    private boolean ShowMultiBall = true;
+    public boolean getshowmulti(){return ShowMultiBall;}
+    public void setshowmulti(){ShowMultiBall = !(ShowMultiBall);}
 
     public Multiball(){
         super();
@@ -36,4 +39,14 @@ public class Multiball extends Powerup{
     public Color getInnerColor(){
         return inner;
     }
+
+    public boolean impact(Ball b){
+        if (multiFace.contains(b.getPosition()) && (getshowmulti())){
+            setshowmulti();
+            System.out.println("Collision detected");
+            return true;
+        }
+            return false;
+    }
 }
+
