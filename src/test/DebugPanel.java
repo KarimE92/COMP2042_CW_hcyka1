@@ -29,9 +29,6 @@ public class DebugPanel extends JPanel {
     private static final Color DEF_BKG = Color.WHITE;
 
 
-    private JButton skipLevel;
-    private JButton resetBalls;
-
     private JSlider ballXSpeed;
     private JSlider ballYSpeed;
 
@@ -40,8 +37,8 @@ public class DebugPanel extends JPanel {
 
         initialize();
 
-        skipLevel = makeButton("Skip Level",e -> gameModel.getWall().nextLevel());
-        resetBalls = makeButton("Reset Balls",e -> gameModel.resetBallCount());
+        JButton skipLevel = makeButton("Skip Level", e -> gameModel.getLevels().nextLevel());
+        JButton resetBalls = makeButton("Reset Balls", e -> gameModel.resetBallCount());
 
         ballXSpeed = makeSlider(-4,4,e -> gameModel.getBall().setXSpeed(ballXSpeed.getValue()));
         ballYSpeed = makeSlider(-4,4,e -> gameModel.getBall().setYSpeed(ballYSpeed.getValue()));

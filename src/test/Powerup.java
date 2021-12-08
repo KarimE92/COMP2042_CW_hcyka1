@@ -5,11 +5,6 @@ import java.awt.geom.Point2D;
 public class Powerup {
 
     private Point2D center;
-    private int minX = 50;
-    private int maxX = 550;
-
-    private int minY = 100;
-    private int maxY = 300;
 
     public Powerup(){
  //random x and y coords between a certain range
@@ -23,7 +18,11 @@ public class Powerup {
 
 
     public void resetPowerup(){
+        int minX = 50;
+        int maxX = 550;
         int point_x = (int)(Math.random() * (maxX - minX)) + minX;
+        int minY = 100;
+        int maxY = 300;
         int point_y = (int)(Math.random() * (maxY - minY)) + minY;
         this.center = new Point(point_x, point_y);
         resetFace(getPosition());

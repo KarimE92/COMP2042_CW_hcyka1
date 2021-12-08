@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JTextArea;
 
 public class InfoMenu extends JComponent implements MouseListener, MouseMotionListener{
 
@@ -17,28 +16,23 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
     private static final String INSTRUCTIONS1 = "Use A and D to move around. Hold shift to sprint";
     private static final String INSTRUCTIONS2 = "Destroy all bricks to move on to the next level";
     private static final String INSTRUCTIONS3 = "Grab powerups along the way to help you";
-    private Font TitleFont;
-    private Font instructionsFont;
+    private final Font TitleFont;
+    private final Font instructionsFont;
 
 
     private static final Color BG_COLOR = Color.BLACK.darker();
     private static final Color TEXT_COLOR = new Color(255, 0, 0);//egyptian blue
     private static final Color CLICKED_BUTTON_COLOR = BG_COLOR.brighter();
     private static final Color CLICKED_TEXT = Color.WHITE;
-    private static final int BORDER_SIZE = 5;
-    private static final float[] DASHES = {12,6};
 
-    Toolkit t=Toolkit.getDefaultToolkit();
-    private Image Title_Image = t.getImage("src/test/Title_Image.jpg");
-
-    private Rectangle menuFace;
-    private Rectangle backButton;
+    private final Rectangle menuFace;
+    private final Rectangle backButton;
 
 
 
-    private Font buttonFont;
+    private final Font buttonFont;
 
-    private GameFrame owner;
+    private final GameFrame owner;
 
     private boolean backClicked;
 
@@ -84,10 +78,6 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
 
         g2d.setColor(TEXT_COLOR);
 
-        FontRenderContext frc = g2d.getFontRenderContext();
-
-        Rectangle2D greetingsRect = instructionsFont.getStringBounds(INSTRUCTIONS,frc);
-
 
         int sX,sY;
 
@@ -98,7 +88,7 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
 
         int tY;
 
-        tY = (int)(sY + 50);
+        tY = sY + 50;
         g2d.setFont(instructionsFont);
         g2d.drawString(INSTRUCTIONS1,5,tY);
 

@@ -66,15 +66,15 @@ public class GameView extends JComponent {
         g2d.drawString(message,250,225);
 
         drawBall(Controller.getGame().getBall(),g2d);
-        for(int i= 0; i<Controller.getGame().getWall().getmultiballpoweruplevelcount(); i++){
-            if(Controller.getGame().getWall().getMultiballpowerup(i).getshowmulti()) {
-                drawPowerup(Controller.getGame().getWall().getMultiballpowerup(i), g2d);
+        for(int i= 0; i<Controller.getGame().getLevels().getmultiballpoweruplevelcount(); i++){
+            if(Controller.getGame().getLevels().getMultiballpowerup(i).getshowmulti()) {
+                drawPowerup(Controller.getGame().getLevels().getMultiballpowerup(i), g2d);
             }
         }
 
-        for(int i= 0; i<Controller.getGame().getWall().getextralifepoweruplevelcount(); i++){
-            if(Controller.getGame().getWall().getExtraLifepowerup(i).getshowextralife()) {
-                drawPowerup(Controller.getGame().getWall().getExtraLifepowerup(i), g2d);
+        for(int i= 0; i<Controller.getGame().getLevels().getextralifepoweruplevelcount(); i++){
+            if(Controller.getGame().getLevels().getExtraLifepowerup(i).getshowextralife()) {
+                drawPowerup(Controller.getGame().getLevels().getExtraLifepowerup(i), g2d);
             }
         }
 
@@ -84,7 +84,7 @@ public class GameView extends JComponent {
                 drawMiniBall(Controller.getGame().getMiniBalls().get(i), g2d);
             }
         }
-        for(Brick b : Controller.getGame().getWall().bricks)
+        for(Brick b : Controller.getGame().getLevels().bricks)
             if(!b.isBroken())
                 drawBrick(b,g2d);
 

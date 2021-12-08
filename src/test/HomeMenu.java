@@ -42,21 +42,21 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
 
     Toolkit t=Toolkit.getDefaultToolkit();
-    private Image Title_Image = t.getImage("src/test/Title_Image.jpg");
+    private final Image Title_Image = t.getImage("src/test/Title_Image.jpg");
 
-    private Rectangle menuFace;
-    private Rectangle startButton;
-    private Rectangle exitButton;
-    private Rectangle infoButton;
+    private final Rectangle menuFace;
+    private final Rectangle startButton;
+    private final Rectangle exitButton;
+    private final Rectangle infoButton;
 
 
 
-    private Font greetingsFont;
-    private Font gameTitleFont;
-    private Font creditsFont;
-    private Font buttonFont;
+    private final Font greetingsFont;
+    private final Font gameTitleFont;
+    private final Font creditsFont;
+    private final Font buttonFont;
 
-    private GameFrame owner;
+    private final GameFrame owner;
 
     private boolean startClicked;
     private boolean exitClicked;

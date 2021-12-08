@@ -24,7 +24,6 @@ abstract public class Ball {
 
     protected float speedX;
     protected float speedY;
-    private float acceleration = (float) 0.0025;
 
     protected Ball(Point2D center, int radius){
         this.center = center;
@@ -98,8 +97,6 @@ abstract public class Ball {
         return ballFace;
     }
 
-    public void setBallFace(RectangularShape rect){this.ballFace = rect;}
-
     public void move(){
          //this will make the ball get faster and faster every frame in the direction it is going
         RectangularShape tmp = (RectangularShape) ballFace;
@@ -115,15 +112,16 @@ abstract public class Ball {
         ballFace = tmp;
     }
     public void accelerate(){
+        float acceleration = (float) 0.0025;
         if (speedX >= 0 && speedX < 10){ //if the ball is moving to the right it should accelerate to the right up to a max speed
-            speedX+=acceleration;
+            speedX+= acceleration;
         }else if(speedX < 0 && speedX > -10){ //if the ball is moving to the left it should accelerate to the left up to a max speed
-            speedX-=acceleration;
+            speedX-= acceleration;
         }
         if (speedY > 0 && speedY < 8){ //if the ball is moving down it should accelerate downwards up to a max speed
-            speedY+=acceleration;
+            speedY+= acceleration;
         }else if(speedY <= 0 && speedY > -8){ //if the ball is moving up it should accelerate upwards up to a max speed
-            speedY-=acceleration;
+            speedY-= acceleration;
         }
     }
 

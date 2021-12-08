@@ -13,21 +13,17 @@ import java.util.Random;
 
 public class GameModel {
 
-    private int BallRadius = 15;
-    private int MiniBallRadius = 10;
 
-
-    private Point startPoint; //the starting point of the level
-    private Random rnd;
-    private Rectangle area;
+    private final Point startPoint; //the starting point of the level
+    private final Rectangle area;
     private RubberBall ball;
     RubberBall getBall(){return ball;}
-    private Player player;
+    private final Player player;
     Player getPlayer(){return player;}
-    private Levels levels;
-    Levels getWall(){return levels;}
+    private final Levels levels;
+    Levels getLevels(){return levels;}
 
-    private ArrayList<MiniBall> MiniBalls = new ArrayList<>();
+    private final ArrayList<MiniBall> MiniBalls = new ArrayList<>();
     public ArrayList<MiniBall> getMiniBalls(){return MiniBalls;}
     public void ClearMiniBalls(){MiniBalls.removeAll(MiniBalls);}
     private int ballCount;
@@ -85,14 +81,15 @@ public class GameModel {
     }
 
     private void makeBall(Point2D ballPos){
-        ball = new RubberBall(ballPos, BallRadius);
+        int ballRadius = 15;
+        ball = new RubberBall(ballPos, ballRadius);
     }
 
     public void move(){
 
-        for (int i = 0; i < MiniBalls.size(); i++) {
-                (MiniBalls.get(i)).move();
-            }
+        for (MiniBall miniBall : MiniBalls) {
+            miniBall.move();
+        }
 
         ball.accelerate();
         ball.move();
@@ -105,10 +102,11 @@ public class GameModel {
     public void findImpacts() {
         for(int i = 0; i< levels.getmultiballpoweruplevelcount(); i++){
             for(int j = 0; j< levels.getextralifepoweruplevelcount(); j++) {
+                int miniBallRadius = 10;
                 if (levels.getMultiballpowerup(i).impact(ball)) { //checking if ball collides with powerup
                     for (int k = 0; k < 3; k++) {
                         Point MiniBallCenter = new Point((int) ((ball.getPosition()).getX() + k), (int) ball.getPosition().getY() + k);
-                        MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+                        MiniBalls.add(new MiniBall(MiniBallCenter, miniBallRadius));
                     }
                 } else if (levels.getExtraLifepowerup(i).impact(ball)) {
                     ballCount++;
@@ -118,7 +116,7 @@ public class GameModel {
                     if (levels.getMultiballpowerup(i).impact(MiniBalls.get(k))) {
                         for (int l = 0; l < 3; l++) {
                             Point MiniBallCenter = new Point((int) ((MiniBalls.get(j).getPosition()).getX() + l), (int) MiniBalls.get(j).getPosition().getY() + l);
-                            MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+                            MiniBalls.add(new MiniBall(MiniBallCenter, miniBallRadius));
                         }
                     } else if (levels.getExtraLifepowerup(i).impact(MiniBalls.get(k))) {
                         ballCount++;
@@ -157,25 +155,25 @@ public class GameModel {
                 }
                 //Miniball collision logic
         if (!MiniBalls.isEmpty()) {
-            for (int i = 0; i < MiniBalls.size(); i++) {
-                if (player.impact(MiniBalls.get(i))) {
-                    MiniBalls.get(i).reverseY();
+            for (MiniBall miniBall : MiniBalls) {
+                if (player.impact(miniBall)) {
+                    miniBall.reverseY();
                 }
 
-                if (impactWall(MiniBalls.get(i))) {
+                if (impactWall(miniBall)) {
                     levels.BrickCollision();
                     for (Brick b : levels.bricks) {
-                        if (b.findImpact(MiniBalls.get(i)) != 0) {
+                        if (b.findImpact(miniBall) != 0) {
                             IncrementScore(b.GetScore());
                             b.SetScore();
                         }
                     }
                 }
-                if (impactBorder(MiniBalls.get(i))) {
-                    MiniBalls.get(i).reverseX();
+                if (impactBorder(miniBall)) {
+                    miniBall.reverseX();
                 }
-                if(MiniBalls.get(i).getPosition().getY() < area.getY()){
-                    MiniBalls.get(i).reverseY();
+                if (miniBall.getPosition().getY() < area.getY()) {
+                    miniBall.reverseY();
                 }
 
             }
@@ -185,25 +183,25 @@ public class GameModel {
 
     boolean impactWall(Ball ball){
         for(Brick b : levels.bricks){
-            switch(b.findImpact(ball)) {
-                //Vertical Impact
-                case Brick.UP_IMPACT:
+            //Vertical Impact
+            //Horizontal Impact
+            switch (b.findImpact(ball)) {
+                case Brick.UP_IMPACT -> {
                     ball.reverseY();
-                    if (b.isBroken()){
-
-                    }
                     return b.setImpact(ball.down, Brick.Crack.UP);
-                case Brick.DOWN_IMPACT:
+                }
+                case Brick.DOWN_IMPACT -> {
                     ball.reverseY();
-                    return b.setImpact(ball.up,Brick.Crack.DOWN);
-
-                //Horizontal Impact
-                case Brick.LEFT_IMPACT:
+                    return b.setImpact(ball.up, Brick.Crack.DOWN);
+                }
+                case Brick.LEFT_IMPACT -> {
                     ball.reverseX();
-                    return b.setImpact(ball.right,Brick.Crack.RIGHT);
-                case Brick.RIGHT_IMPACT:
+                    return b.setImpact(ball.right, Brick.Crack.RIGHT);
+                }
+                case Brick.RIGHT_IMPACT -> {
                     ball.reverseX();
-                    return b.setImpact(ball.left,Brick.Crack.LEFT);
+                    return b.setImpact(ball.left, Brick.Crack.LEFT);
+                }
             }
         }
         return false;
@@ -219,7 +217,7 @@ public class GameModel {
     public void ResetPosition(){
         player.moveTo(startPoint);
         ball.moveTo(startPoint);
-        rnd = new Random();
+        Random rnd = new Random();
         float speedX,speedY;
         do{
             speedX = rnd.nextInt(5) - 2;

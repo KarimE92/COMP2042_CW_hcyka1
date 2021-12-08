@@ -24,22 +24,22 @@ import java.util.ArrayList;
 public class Levels {
 
     private static final int LEVELS_COUNT = 10;
-    private int[] multiballpoweruplevelcount = new int[]{0, 1, 1, 2, 2, 3, 3, 4, 4, 5};
-    private int[] extralifepoweruplevelcount = new int[]{0, 1, 1, 2, 2, 3, 3, 4, 4, 5};
+    private final int[] multiballpoweruplevelcount = new int[]{0, 1, 1, 2, 2, 3, 3, 4, 4, 5};
+    private final int[] extralifepoweruplevelcount = new int[]{0, 1, 1, 2, 2, 3, 3, 4, 4, 5};
     int getextralifepoweruplevelcount(){return extralifepoweruplevelcount[currentlevel-1];}
     ExtraLifePowerup getExtraLifepowerup(int i){return extralifepowerup.get(i);}
     private static final int CLAY = 1;
     private static final int STEEL = 2;
     private static final int CEMENT = 3;
 
-    private ArrayList<ExtraLifePowerup> extralifepowerup = new ArrayList<>();
-    private ArrayList<MultiballPowerup> multiballpowerup  = new ArrayList<>();
+    private final ArrayList<ExtraLifePowerup> extralifepowerup = new ArrayList<>();
+    private final ArrayList<MultiballPowerup> multiballpowerup  = new ArrayList<>();
 
     int getmultiballpoweruplevelcount(){return multiballpoweruplevelcount[currentlevel-1];}
     MultiballPowerup getMultiballpowerup(int i){return multiballpowerup.get(i);}
     Brick[] bricks;
 
-    private Brick[][] levels;
+    private final Brick[][] levels;
     private int currentlevel;
 
 
@@ -222,8 +222,8 @@ public class Levels {
     }
 
 
-    public int BrickCollision(){
-        return brickCount--;
+    public void BrickCollision(){
+        brickCount--;
     }
 
     public boolean isDone(){
@@ -261,21 +261,12 @@ public class Levels {
     }
 
     private Brick makeBrick(Point point, Dimension size, int type){
-        Brick out;
-        switch(type){
-            case CLAY:
-                out = new ClayBrick(point,size);
-                break;
-            case STEEL:
-                out = new SteelBrick(point,size);
-                break;
-            case CEMENT:
-                out = new CementBrick(point, size);
-                break;
-            default:
-                throw  new IllegalArgumentException(String.format("Unknown Type:%d\n",type));
-        }
-        return  out;
+        return switch (type) {
+            case CLAY -> new ClayBrick(point, size);
+            case STEEL -> new SteelBrick(point, size);
+            case CEMENT -> new CementBrick(point, size);
+            default -> throw new IllegalArgumentException(String.format("Unknown Type:%d\n", type));
+        };
     }
 
 }

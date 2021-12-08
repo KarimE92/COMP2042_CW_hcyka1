@@ -6,9 +6,8 @@ import java.awt.geom.Point2D;
 
 public class ExtraLifePowerup extends Powerup{
     private Shape multiFace;
-    private int radius = 16;
-    private Color border;
-    private Color inner;
+    private final Color border;
+    private final Color inner;
     private boolean ShowExtraLife = true;
     public boolean getshowextralife(){return ShowExtraLife;}
     public void setshowextralife(){ShowExtraLife = !(ShowExtraLife);}
@@ -16,16 +15,16 @@ public class ExtraLifePowerup extends Powerup{
         super();
         multiFace = makePowerup(getPosition());
         Color inner = new Color(255, 0, 0); //Defining the colour of the ball
-        Color border = inner.darker().darker(); //Defining the border of the ball
-        this.border = border;
+        this.border = inner.darker().darker();
         this.inner  = inner;
 
     }
     public Shape makePowerup(Point2D center){
+        int radius = 16;
         double x = center.getX() - (radius / 2);
         double y = center.getY() - (radius / 2);
 
-        return new Ellipse2D.Double(x,y,radius,radius);
+        return new Ellipse2D.Double(x,y, radius, radius);
     }
     @Override
     public Shape getmultiFace(){

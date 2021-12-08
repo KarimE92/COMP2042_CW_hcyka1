@@ -27,10 +27,10 @@ public class DebugConsole extends JDialog implements WindowListener{
     private static final String TITLE = "Debug Console";
 
 
-    private JFrame owner;
-    private DebugPanel debugPanel;
-    private GameController gameBoard;
-    private GameModel gameModel;
+    private final JFrame owner;
+    private final DebugPanel debugPanel;
+    private final GameController gameBoard;
+    private final GameModel gameModel;
 
 
     public DebugConsole(JFrame owner, GameModel gameModel, GameController gameBoard){

@@ -27,16 +27,16 @@ public class GameController extends JComponent implements KeyListener,MouseListe
 
 
     private Timer gameTimer;
-    private GameModel gameModel;
+    private final GameModel gameModel;
     GameModel getGame(){return gameModel;}
 
-    private test.GameView GameView;
+    private final test.GameView GameView;
 
 
     private boolean showPauseMenu;
     boolean getpausemenu(){return showPauseMenu;}
 
-    private DebugConsole debugConsole;
+    private final DebugConsole debugConsole;
 
     int[] highscorelist;
     int[] gethighscorelist() throws FileNotFoundException {
@@ -82,21 +82,21 @@ public class GameController extends JComponent implements KeyListener,MouseListe
             e.printStackTrace();
         }
         //initialize the first level
-        gameModel.getWall().nextLevel();
+        gameModel.getLevels().nextLevel();
 
         gameTimer = new Timer(10,e ->{
             gameModel.move();
             gameModel.findImpacts();
-            GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", gameModel.getWall().getBrickCount(), gameModel.getBallCount(), gameModel.GetScore()));
+            GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", gameModel.getLevels().getBrickCount(), gameModel.getBallCount(), gameModel.GetScore()));
             if(gameModel.isBallLost()){
                 if(gameModel.ballEnd()){
                     //save the high score if it's above any currently existing high scores, and add their high score if there is none, and reset the score variable to zero
-                    gameModel.getWall().wallReset();
+                    gameModel.getLevels().wallReset();
                     gameModel.resetBallCount();
                     GameView.setmessage("Game Over");
                     gameModel.ClearMiniBalls();
 
-                    gameModel.getWall().resetLevel();
+                    gameModel.getLevels().resetLevel();
                     gameModel.refreshWall();
 
                     try {
@@ -129,13 +129,13 @@ public class GameController extends JComponent implements KeyListener,MouseListe
                 gameModel.ResetPosition();
                 gameTimer.stop();
             }
-            else if(gameModel.getWall().isDone()){
-                if(gameModel.getWall().hasLevel()){
+            else if(gameModel.getLevels().isDone()){
+                if(gameModel.getLevels().hasLevel()){
                     GameView.setmessage("Go to Next Level");
                     gameTimer.stop();
                     gameModel.ResetPosition();
-                    gameModel.getWall().wallReset();
-                    gameModel.getWall().nextLevel();
+                    gameModel.getLevels().wallReset();
+                    gameModel.getLevels().nextLevel();
                     gameModel.ClearMiniBalls();
                 }
                 else{
@@ -205,17 +205,17 @@ public class GameController extends JComponent implements KeyListener,MouseListe
                 break;
             case KeyEvent.VK_SPACE:
                 if (GameEnd){
-                    gameModel.getWall().resetLevel();
+                    gameModel.getLevels().resetLevel();
                     gameModel.ResetPosition();
                     gameModel.refreshWall();
-                    gameModel.getWall().wallReset();
+                    gameModel.getLevels().wallReset();
                     showPauseMenu = false;
                     gameModel.ClearMiniBalls();
                     gameModel.resetBallCount();
                     GameView.updatescreen(this);
                     GameEnd = false;
                     gameModel.ResetScore();
-                    GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", gameModel.getWall().getBrickCount(), gameModel.getBallCount(), gameModel.GetScore()));
+                    GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", gameModel.getLevels().getBrickCount(), gameModel.getBallCount(), gameModel.GetScore()));
                 }
                 if(!showPauseMenu)
                     if(gameModel.gethighscoremenu()){
@@ -253,10 +253,10 @@ public class GameController extends JComponent implements KeyListener,MouseListe
         else if(GameView.getrestartButtonRect().contains(p)){
             GameView.setmessage("Restarting Game...");
             gameModel.ResetScore();
-            gameModel.getWall().resetLevel();
+            gameModel.getLevels().resetLevel();
             gameModel.ResetPosition();
             gameModel.refreshWall();
-            gameModel.getWall().wallReset();
+            gameModel.getLevels().wallReset();
             showPauseMenu = false;
             gameModel.ClearMiniBalls();
             gameModel.resetBallCount();

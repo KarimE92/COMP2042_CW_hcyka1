@@ -20,12 +20,11 @@ package test;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.awt.geom.RectangularShape;
 
 public class RubberBall extends Ball {
 
-    private Color border;
-    private Color inner;
+    private final Color border;
+    private final Color inner;
 
 
     public RubberBall(Point2D center, int radius){
@@ -36,8 +35,7 @@ public class RubberBall extends Ball {
 
 
         Color inner = new Color(255, 219, 88); //Defining the colour of the ball
-        Color border = inner.darker().darker(); //Defining the border of the ball
-        this.border = border;
+        this.border = inner.darker().darker();
         this.inner  = inner;
 
 

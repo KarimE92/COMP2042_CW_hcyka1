@@ -1,6 +1,6 @@
 /*
  *  Brick Destroy - A simple Arcade video game
- *   Copyright (C) 2017  Filippo Ranza
+ *   Karim Elbishouty
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ import java.awt.event.WindowFocusListener;
 public class GameFrame extends JFrame implements WindowFocusListener {
 
     private static final String DEF_TITLE = "Brick Destroy";
-    private InfoMenu InfoMenu;
+    private final InfoMenu InfoMenu;
     public GameController gameBoard;
-    private HomeMenu homeMenu;
+    private final HomeMenu homeMenu;
     private boolean gaming;
 
     public GameFrame(){
@@ -94,14 +94,6 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
     @Override
     public void windowGainedFocus(WindowEvent windowEvent) {
-        /*
-            the first time the frame loses focus is because
-            it has been disposed to install the GameController,
-            so went it regains the focus it's ready to play.
-            of course calling a method such as 'onLostFocus'
-            is useful only if the GameController as been displayed
-            at least once
-         */
         gaming = true;
     }
 

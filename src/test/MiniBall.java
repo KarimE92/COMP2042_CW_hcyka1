@@ -5,20 +5,19 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class MiniBall extends Ball{
-    private Color border;
-    private Color inner;
-    private Random rnd;
+    private final Color border;
+    private final Color inner;
+
     public MiniBall(Point2D center, int radius) {
         super(center, radius);
 
 
         Color inner = new Color(0, 53, 255); //Defining the colour of the ball
-        Color border = inner.darker().darker(); //Defining the border of the ball
-        this.border = border;
+        this.border = inner.darker().darker();
         this.inner  = inner;
 
 
-        rnd = new Random();
+        Random rnd = new Random();
         do{
             setXSpeed(rnd.nextInt(5) - 2);
         }while(getSpeedX() == 0);
