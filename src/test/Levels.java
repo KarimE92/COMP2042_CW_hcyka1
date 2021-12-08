@@ -23,9 +23,9 @@ import java.util.ArrayList;
 
 public class Levels {
 
-    private static final int LEVELS_COUNT = 4;
-    private int[] multiballpoweruplevelcount = new int[]{20, 1, 1, 25};
-    private int[] extralifepoweruplevelcount = new int[]{20, 1, 1, 25};
+    private static final int LEVELS_COUNT = 10;
+    private int[] multiballpoweruplevelcount = new int[]{0, 1, 1, 2, 2, 3, 3, 4, 4, 5};
+    private int[] extralifepoweruplevelcount = new int[]{0, 1, 1, 2, 2, 3, 3, 4, 4, 5};
     int getextralifepoweruplevelcount(){return extralifepoweruplevelcount[currentlevel-1];}
     ExtraLifePowerup getExtraLifepowerup(int i){return extralifepowerup.get(i);}
     private static final int CLAY = 1;
@@ -85,7 +85,7 @@ public class Levels {
         for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
             double x = (brickOnLine * brickLen) - (brickLen / 2);
             p.setLocation(x,y);
-            tmp[i] = new ClayBrick(p,brickSize);
+            tmp[i] = makeBrick(p,brickSize, type);
         }
         return tmp;
 
@@ -136,14 +136,75 @@ public class Levels {
         return tmp;
     }
 
+    private Brick[] makeStripesLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, int typeA, int typeB, int typeC){
+        /*
+          if brickCount is not divisible by line count,brickCount is adjusted to the biggest
+          multiple of lineCount smaller then brickCount
+         */
+        brickCnt -= brickCnt % lineCnt;
+
+        int brickOnLine = brickCnt / lineCnt;
+
+
+        double brickLen = drawArea.getWidth() / brickOnLine;
+        double brickHgt = brickLen / brickSizeRatio;
+
+        brickCnt += lineCnt / 2;
+
+        Brick[] tmp  = new Brick[brickCnt];
+
+        Dimension brickSize = new Dimension((int) brickLen,(int) brickHgt);
+        Point p = new Point();
+
+        int i;
+        for(i = 0; i < tmp.length; i++){
+            int line = i / brickOnLine;
+            if(line == lineCnt)
+                break;
+            int posX = i % brickOnLine;
+            double x = posX * brickLen;
+            x =(line % 2 == 0) ? x : (x - (brickLen / 2));
+            double y = (line) * brickHgt;
+            p.setLocation(x,y);
+
+            if(line % 3 == 0){
+                tmp[i] = makeBrick(p,brickSize,typeA);
+            }else if(line % 3 == 1){
+                tmp[i] = makeBrick(p,brickSize,typeB);
+            }else{
+                tmp[i] = makeBrick(p,brickSize,typeC);
+            }
+        }
+
+        for(double y = brickHgt;i < tmp.length;i++, y += 2*brickHgt){
+            double x = (brickOnLine * brickLen) - (brickLen / 2);
+            p.setLocation(x,y);
+            if(y%3 == 0) {
+                tmp[i] = makeBrick(p, brickSize, typeA);
+            }else if(y%3 == 1){
+                tmp[i] = makeBrick(p, brickSize, typeB);
+            }else{
+                tmp[i] = makeBrick(p,brickSize, typeC);
+            }
+        }
+        return tmp;
+    }
+
+
 
 
     private Brick[][] makeLevels(Rectangle drawArea,int brickCount,int lineCount,double brickDimensionRatio){
         Brick[][] Level = new Brick[LEVELS_COUNT][];
         Level[0] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
-        Level[1] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
-        Level[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,STEEL);
-        Level[3] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
+        Level[1] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
+        Level[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
+        Level[3] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CEMENT);
+        Level[4] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CEMENT,STEEL);
+        Level[5] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL);
+        Level[6] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY, STEEL, CEMENT);
+        Level[7] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
+        Level[8] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio, CEMENT, STEEL, STEEL);
+        Level[9] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio, STEEL, CEMENT, CEMENT);
         return Level;
     }
 
