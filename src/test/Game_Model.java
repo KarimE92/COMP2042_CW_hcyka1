@@ -13,25 +13,19 @@ import java.util.Random;
 
 public class Game_Model {
 
-    private Point startPoint; //the starting point of the level
-
     private int BallRadius = 15;
     private int MiniBallRadius = 10;
 
 
+    private Point startPoint; //the starting point of the level
     private Random rnd;
     private Rectangle area;
-    private int bricknum;
-    private int linenum;
-    private double brickdimension;
     private RubberBall ball;
     RubberBall getBall(){return ball;}
     private Player player;
     Player getPlayer(){return player;}
     private Wall wall;
     Wall getWall(){return wall;}
-    private Multiball multiball;
-    Multiball getmultipowerup(){return multiball;}
 
     private ArrayList<MiniBall> MiniBalls = new ArrayList<>();
     public ArrayList<MiniBall> getMiniBalls(){return MiniBalls;}
@@ -78,9 +72,7 @@ public class Game_Model {
         wall = new Wall(drawArea,brickCount,lineCount,brickDimensionRatio);
 
         area = drawArea;
-        bricknum = brickCount;
-        linenum = lineCount;
-        brickdimension = brickDimensionRatio;
+
 
 
 
@@ -111,12 +103,24 @@ public class Game_Model {
 
 
     public void findImpacts() {
-        if (wall.getMultiball().impact(ball)) {
-            for (int i = 0; i < 3; i++) {
-                Point MiniBallCenter = new Point((int)((ball.getPosition()).getX() + i), (int)ball.getPosition().getY() + i);
-                MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+        for(int i= 0; i<wall.getmultiballpoweruplevelcount(); i++){
+            if (wall.getMultiballpowerup(i).impact(ball)) { //checking if ball collides with powerup
+                for (int j = 0; j < 3; j++) {
+                    Point MiniBallCenter = new Point((int)((ball.getPosition()).getX() + j), (int)ball.getPosition().getY() + j);
+                    MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+                }
+            }
+            for(int j=0; j<MiniBalls.size(); j++){ //checking if miniball collides with powerup
+                if (wall.getMultiballpowerup(i).impact(MiniBalls.get(j))){
+                    for (int k = 0; k < 3; k++) {
+                        Point MiniBallCenter = new Point((int)((MiniBalls.get(j).getPosition()).getX() + k), (int)MiniBalls.get(j).getPosition().getY() + k);
+                        MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+                    }
+                }
             }
         }
+
+
 
         //ball collision logic
         if (player.impact(ball)) {

@@ -18,19 +18,22 @@
 package test;
 
 import java.awt.*;
-
+import java.util.ArrayList;
 
 
 public class Wall {
 
     private static final int LEVELS_COUNT = 4;
+    private int[] multiballpoweruplevelcount = new int[]{20, 1, 1, 2, 2};
 
     private static final int CLAY = 1;
     private static final int STEEL = 2;
     private static final int CEMENT = 3;
 
-    private Multiball multiball;
-    Multiball getMultiball(){return multiball;}
+    private ArrayList<Multiball> multiballpowerup  = new ArrayList<>();
+
+    int getmultiballpoweruplevelcount(){return multiballpoweruplevelcount[currentlevel-1];}
+    Multiball getMultiballpowerup(int i){return multiballpowerup.get(i);}
     Brick[] bricks;
 
     private Brick[][] levels;
@@ -138,10 +141,14 @@ public class Wall {
         Level[1] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
         Level[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,STEEL);
         Level[3] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
-        multiball = new Multiball();
         return Level;
     }
 
+    public void nextPowerup(){
+        for(int i=0; i<multiballpoweruplevelcount[currentlevel-1]; i++){
+            multiballpowerup.add(new Multiball());
+        }
+    }
 
     public int getBrickCount(){
         return brickCount;
@@ -159,22 +166,22 @@ public class Wall {
     public void nextLevel(){
         bricks = levels[currentlevel++];
         brickCount = bricks.length;
-        multiball.resetPowerup();
-        if(!multiball.getshowmulti()){
-            multiball.setshowmulti();
-        }
+        multiballpowerup.removeAll(multiballpowerup);
+        nextPowerup();
     }
+
 
     public void resetLevel(){
         wallReset();
         currentlevel = 0;
         bricks = levels[currentlevel];
         System.out.println("Resetting level...");
-        multiball.resetPowerup();
-        if(!multiball.getshowmulti()){
-            multiball.setshowmulti();
-        }
+        multiballpowerup.removeAll(multiballpowerup);
+        currentlevel += 1;
+        nextPowerup();
+
     }
+
     public boolean hasLevel(){
         return currentlevel < levels.length;
     }

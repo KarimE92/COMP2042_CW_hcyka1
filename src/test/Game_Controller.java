@@ -135,6 +135,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                     gameModel.ResetPosition();
                     gameModel.getWall().wallReset();
                     gameModel.getWall().nextLevel();
+                    gameModel.ClearMiniBalls();
                 }
                 else{
                     GameView.setmessage("ALL WALLS DESTROYED");

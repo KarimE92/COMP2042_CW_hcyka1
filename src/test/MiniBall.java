@@ -26,8 +26,7 @@ public class MiniBall extends Ball{
         do{
             setYSpeed(-rnd.nextInt(3));
         }while(getSpeedY() == 0);
-        System.out.println("X Speed: " +getSpeedX());
-        System.out.println("Y Speed: " +getSpeedY());
+
     }
 
     public Color getBorderColor(){
