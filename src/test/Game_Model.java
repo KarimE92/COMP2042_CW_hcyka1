@@ -6,23 +6,30 @@ and setup the next level when the current level ends
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Random;
 
 
 
 public class Game_Model {
 
+    private int BallRadius = 15;
+    private int MiniBallRadius = 10;
+
+
     private Point startPoint; //the starting point of the level
-
-
     private Random rnd;
     private Rectangle area;
-    private int bricknum;
-    private int linenum;
-    private double brickdimension;
-    Ball ball;
-    Player player;
-    Wall wall;
+    private RubberBall ball;
+    RubberBall getBall(){return ball;}
+    private Player player;
+    Player getPlayer(){return player;}
+    private Wall wall;
+    Wall getWall(){return wall;}
+
+    private ArrayList<MiniBall> MiniBalls = new ArrayList<>();
+    public ArrayList<MiniBall> getMiniBalls(){return MiniBalls;}
+    public void ClearMiniBalls(){MiniBalls.removeAll(MiniBalls);}
     private int ballCount;
     private boolean ballLost;
     private static final int ScoreLength = 5;
@@ -35,6 +42,12 @@ public class Game_Model {
         Score = 0;
     }
     public int GetScore(){return Score;}
+
+
+
+
+
+
 
     boolean highscoremenu;
     boolean gethighscoremenu(){return highscoremenu;}
@@ -54,18 +67,16 @@ public class Game_Model {
         ballCount = 3;
         ballLost = false;
 
-        rnd = new Random();
-        player = new Player((Point) ballPos.clone(),150,10, drawArea);
+        player = new Player((Point) ballPos.clone(),150,15, drawArea);
 
         wall = new Wall(drawArea,brickCount,lineCount,brickDimensionRatio);
 
         area = drawArea;
-        bricknum = brickCount;
-        linenum = lineCount;
-        brickdimension = brickDimensionRatio;
 
 
-        LevelReset();
+
+
+        ResetPosition();
         //create wall of bricks
         //create player
         //create ball
@@ -74,25 +85,50 @@ public class Game_Model {
     }
 
     private void makeBall(Point2D ballPos){
-        ball = new RubberBall(ballPos);
+        ball = new RubberBall(ballPos, BallRadius);
     }
 
     public void move(){
-        player.move();
+
+        for (int i = 0; i < MiniBalls.size(); i++) {
+                (MiniBalls.get(i)).move();
+            }
+
+        ball.accelerate();
         ball.move();
+
+        player.move();
+
     }
 
 
-    public void findImpacts(){
-        if(player.impact(ball)){
+    public void findImpacts() {
+        for(int i= 0; i<wall.getmultiballpoweruplevelcount(); i++){
+            if (wall.getMultiballpowerup(i).impact(ball)) { //checking if ball collides with powerup
+                for (int j = 0; j < 3; j++) {
+                    Point MiniBallCenter = new Point((int)((ball.getPosition()).getX() + j), (int)ball.getPosition().getY() + j);
+                    MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+                }
+            }
+            for(int j=0; j<MiniBalls.size(); j++){ //checking if miniball collides with powerup
+                if (wall.getMultiballpowerup(i).impact(MiniBalls.get(j))){
+                    for (int k = 0; k < 3; k++) {
+                        Point MiniBallCenter = new Point((int)((MiniBalls.get(j).getPosition()).getX() + k), (int)MiniBalls.get(j).getPosition().getY() + k);
+                        MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+                    }
+                }
+            }
+        }
+
+
+
+        //ball collision logic
+        if (player.impact(ball)) {
             ball.reverseY();
         }
-        else if(impactWall()){
-            /*for efficiency reverse is done into method impactWall
-             * because for every brick program checks for horizontal and vertical impacts
-             */
+        if (impactWall(ball)) {
             wall.BrickCollision();
-            for(Brick b : wall.bricks) {
+            for (Brick b : wall.bricks) {
                 if (b.findImpact(ball) != 0) {
                     IncrementScore(b.GetScore());
                     b.SetScore();
@@ -100,18 +136,47 @@ public class Game_Model {
             }
         }
 
-        else if(impactBorder()) {
+        if (impactBorder(ball)) {
             ball.reverseX();
         }
-        else if(ball.getPosition().getY() < area.getY()){
-            ball.reverseY();
-        }
-        else if(ball.getPosition().getY() > area.getY() + area.getHeight()){
-            ballCount--;
-            ballLost = true;
+
+                if (ball.getPosition().getY() < area.getY()) {
+                    ball.reverseY();
+                }
+                if (ball.getPosition().getY() > area.getY() + area.getHeight()) {
+                    ballCount--;
+                    ballLost = true;
+                    ClearMiniBalls();
+                }
+                //Miniball collision logic
+        if (!MiniBalls.isEmpty()) {
+            for (int i = 0; i < MiniBalls.size(); i++) {
+                if (player.impact(MiniBalls.get(i))) {
+                    MiniBalls.get(i).reverseY();
+                }
+
+                if (impactWall(MiniBalls.get(i))) {
+                    wall.BrickCollision();
+                    for (Brick b : wall.bricks) {
+                        if (b.findImpact(MiniBalls.get(i)) != 0) {
+                            IncrementScore(b.GetScore());
+                            b.SetScore();
+                        }
+                    }
+                }
+                if (impactBorder(MiniBalls.get(i))) {
+                    MiniBalls.get(i).reverseX();
+                }
+                if(MiniBalls.get(i).getPosition().getY() < area.getY()){
+                    MiniBalls.get(i).reverseY();
+                }
+
+            }
         }
     }
-    boolean impactWall(){
+
+
+    boolean impactWall(Ball ball){
         for(Brick b : wall.bricks){
             switch(b.findImpact(ball)) {
                 //Vertical Impact
@@ -136,7 +201,7 @@ public class Game_Model {
         }
         return false;
     }
-    private boolean impactBorder(){
+    private boolean impactBorder(Ball ball){
         Point2D p = ball.getPosition();
         return ((p.getX() < area.getX()) ||(p.getX() > (area.getX() + area.getWidth())));
     }
@@ -144,9 +209,10 @@ public class Game_Model {
 
 
 
-    public void LevelReset(){
+    public void ResetPosition(){
         player.moveTo(startPoint);
         ball.moveTo(startPoint);
+        rnd = new Random();
         float speedX,speedY;
         do{
             speedX = rnd.nextInt(5) - 2;
@@ -160,13 +226,6 @@ public class Game_Model {
 
     }
 
-
-    public void setBallXSpeed(int s){
-        ball.setXSpeed(s);
-    }
-    public void setBallYSpeed(int s){
-        ball.setYSpeed(s);
-    }
 
 
     public int getBallCount(){

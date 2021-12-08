@@ -11,22 +11,22 @@ import java.awt.geom.RectangularShape;
  */
 abstract public class Ball {
 
-    private Shape ballFace;
 
-    private Point2D center;
-
+    protected Point2D center;
+    Point2D getCenter(){return center;}
     Point2D up;
     Point2D down;
     Point2D left;
     Point2D right;
 
-    private Color border;
-    private Color inner;
+    protected Shape ballFace;
 
-    private float speedX;
-    private float speedY;
 
-    public Ball(Point2D center){
+    protected float speedX;
+    protected float speedY;
+    private float acceleration = (float) 0.0025;
+
+    protected Ball(Point2D center, int radius){
         this.center = center;
 
         up = new Point2D.Double();
@@ -34,20 +34,15 @@ abstract public class Ball {
         left = new Point2D.Double();
         right = new Point2D.Double();
 
-        final int radius = 10;
+
         up.setLocation(center.getX(),center.getY()-(radius / 2));
         down.setLocation(center.getX(),center.getY()+(radius / 2));
 
         left.setLocation(center.getX()-(radius /2),center.getY());
         right.setLocation(center.getX()+(radius /2),center.getY());
 
-
         ballFace = makeBall(center,radius,radius);
 
-        Color inner = new Color(255, 219, 88); //Defining the colour of the ball
-        Color border = inner.darker().darker(); //Defining the border of the ball
-        this.border = border;
-        this.inner  = inner;
         speedX = 0;
         speedY = 0;
     }
@@ -60,29 +55,6 @@ abstract public class Ball {
         return new Ellipse2D.Double(x,y,radiusA,radiusB);
     }
 
-    public void move(){
-        float acceleration = (float) 0.0025; //this will make the ball get faster and faster every frame in the direction it is going
-        RectangularShape tmp = (RectangularShape) ballFace;
-        if (speedX > 0 && speedX < 10){ //if the ball is moving to the right it should accelerate to the right up to a max speed
-            speedX+=acceleration;
-        }else if(speedX < 0 && speedX > -10){ //if the ball is moving to the left it should accelerate to the left up to a max speed
-            speedX-=acceleration;
-        }
-        if (speedY > 0 && speedY < 10){ //if the ball is moving down it should accelerate downwards up to a max speed
-            speedY+=acceleration;
-        }else if(speedY < 0 && speedY > -10){ //if the ball is moving up it should accelerate upwards up to a max speed
-            speedY-=acceleration;
-        }
-        center.setLocation((center.getX() + speedX),(center.getY() + speedY));
-        double w = tmp.getWidth();
-        double h = tmp.getHeight();
-
-        tmp.setFrame((center.getX() -(w / 2)),(center.getY() - (h / 2)),w,h);
-        setPoints(w,h);
-
-
-        ballFace = tmp;
-    }
 
     public void setSpeed(float x,float y){
         speedX = x;
@@ -105,39 +77,62 @@ abstract public class Ball {
         speedY *= -1;
     }
 
-    public Color getBorderColor(){
-        return border;
-    }
 
-    public Color getInnerColor(){
-        return inner;
-    }
 
     public Point2D getPosition(){
         return center;
+    }
+
+    public void moveTo(Point p){
+        getCenter().setLocation(p);
+
+        RectangularShape tmp = (RectangularShape) ballFace;
+        double w = tmp.getWidth();
+        double h = tmp.getHeight();
+
+        tmp.setFrame((getCenter().getX() -(w / 2)),(getCenter().getY() - (h / 2)),w,h);
+        ballFace = tmp;
     }
 
     public Shape getBallFace(){
         return ballFace;
     }
 
-    public void moveTo(Point p){
-        center.setLocation(p);
+    public void setBallFace(RectangularShape rect){this.ballFace = rect;}
 
+    public void move(){
+         //this will make the ball get faster and faster every frame in the direction it is going
         RectangularShape tmp = (RectangularShape) ballFace;
+
+        center.setLocation((center.getX() + speedX),(center.getY() + speedY));
         double w = tmp.getWidth();
         double h = tmp.getHeight();
 
         tmp.setFrame((center.getX() -(w / 2)),(center.getY() - (h / 2)),w,h);
+        setPoints(w,h);
+
+
         ballFace = tmp;
     }
+    public void accelerate(){
+        if (speedX >= 0 && speedX < 10){ //if the ball is moving to the right it should accelerate to the right up to a max speed
+            speedX+=acceleration;
+        }else if(speedX < 0 && speedX > -10){ //if the ball is moving to the left it should accelerate to the left up to a max speed
+            speedX-=acceleration;
+        }
+        if (speedY > 0 && speedY < 8){ //if the ball is moving down it should accelerate downwards up to a max speed
+            speedY+=acceleration;
+        }else if(speedY <= 0 && speedY > -8){ //if the ball is moving up it should accelerate upwards up to a max speed
+            speedY-=acceleration;
+        }
+    }
 
-    private void setPoints(double width,double height){
-        up.setLocation(center.getX(),center.getY()-(height / 2));
-        down.setLocation(center.getX(),center.getY()+(height / 2));
+    public void setPoints(double width,double height){
+        this.up.setLocation(center.getX(),center.getY()-(height / 2));
+        this.down.setLocation(center.getX(),center.getY()+(height / 2));
 
-        left.setLocation(center.getX()-(width / 2),center.getY());
-        right.setLocation(center.getX()+(width / 2),center.getY());
+        this.left.setLocation(center.getX()-(width / 2),center.getY());
+        this.right.setLocation(center.getX()+(width / 2),center.getY());
     }
 
     public float getSpeedX(){

@@ -92,7 +92,7 @@ public class DebugConsole extends JDialog implements WindowListener{
     @Override
     public void windowActivated(WindowEvent windowEvent) {
         setLocation();
-        Ball b = gameModel.ball;
+        Ball b = gameModel.getBall();
         debugPanel.setValues(b.getSpeedX(),b.getSpeedY());
     }
 
