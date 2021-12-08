@@ -21,17 +21,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.BufferedWriter;
 
 
 public class GameFrame extends JFrame implements WindowFocusListener {
 
     private static final String DEF_TITLE = "Brick Destroy";
     private InfoMenu InfoMenu;
-    public Game_Controller gameBoard;
+    public GameController gameBoard;
     private HomeMenu homeMenu;
     private boolean gaming;
 
@@ -42,7 +38,7 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
         this.setLayout(new BorderLayout());
 
-        gameBoard = new Game_Controller(this);
+        gameBoard = new GameController(this);
 
         homeMenu = new HomeMenu(this,new Dimension(600,450));
 
@@ -100,10 +96,10 @@ public class GameFrame extends JFrame implements WindowFocusListener {
     public void windowGainedFocus(WindowEvent windowEvent) {
         /*
             the first time the frame loses focus is because
-            it has been disposed to install the Game_Controller,
+            it has been disposed to install the GameController,
             so went it regains the focus it's ready to play.
             of course calling a method such as 'onLostFocus'
-            is useful only if the Game_Controller as been displayed
+            is useful only if the GameController as been displayed
             at least once
          */
         gaming = true;

@@ -1,5 +1,5 @@
 package test;
-/* Game_Model should be the main game's internal logic
+/* GameModel should be the main game's internal logic
 It should be able to setup the initial level by calling a class, move the ball and the player,
 and setup the next level when the current level ends
 */
@@ -11,7 +11,7 @@ import java.util.Random;
 
 
 
-public class Game_Model {
+public class GameModel {
 
     private int BallRadius = 15;
     private int MiniBallRadius = 10;
@@ -59,7 +59,7 @@ public class Game_Model {
         }
 
     }
-    protected Game_Model(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {
+    protected GameModel(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {
 
         this.startPoint = new Point(ballPos);
 

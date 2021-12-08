@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.io.FileNotFoundException;
 
-public class Game_View extends JComponent {
+public class GameView extends JComponent {
 
     private String message;
     void setmessage(String string){message = string; }
@@ -18,7 +18,7 @@ public class Game_View extends JComponent {
     private static final Color MENU_COLOR = new Color(0, 255, 0); //pause menu colour
     private int strLen;
 
-    private Game_Controller Controller;
+    private GameController Controller;
 
     private static final int DEF_WIDTH = 600;
     int getwidth(){return DEF_WIDTH;}
@@ -37,7 +37,7 @@ public class Game_View extends JComponent {
     Rectangle getrestartButtonRect(){return restartButtonRect;}
 
 
-    protected Game_View(Game_Controller GameBoard) {
+    protected GameView(GameController GameBoard) {
         Controller = GameBoard;
         strLen = 0;
         message = "Press Spacebar to Start!";
@@ -51,7 +51,7 @@ public class Game_View extends JComponent {
 
     }
 
-    public void updatescreen(Game_Controller GameBoard){
+    public void updatescreen(GameController GameBoard){
         this.Controller = GameBoard;
         this.Controller.getGame().IncrementScore((int)(this.Controller.getGame().getBall().getSpeedX()));
         repaint();
@@ -192,6 +192,10 @@ public class Game_View extends JComponent {
             g2d.drawString(String.valueOf(highscores[i]), x, y);
             y+=50;
         }
+
+        x= (this.getWidth() - strLen) / 4;
+        y= 400;
+        g2d.drawString("Press Space to Exit", x, y);
 
     }
     private void drawPauseMenu(Graphics2D g2d){

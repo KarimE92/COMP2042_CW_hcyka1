@@ -36,7 +36,7 @@ public class DebugPanel extends JPanel {
     private JSlider ballYSpeed;
 
 
-    public DebugPanel(Game_Model gameModel){
+    public DebugPanel(GameModel gameModel){
 
         initialize();
 

@@ -27,16 +27,16 @@ public class Levels {
     private int[] multiballpoweruplevelcount = new int[]{20, 1, 1, 25};
     private int[] extralifepoweruplevelcount = new int[]{20, 1, 1, 25};
     int getextralifepoweruplevelcount(){return extralifepoweruplevelcount[currentlevel-1];}
-    ExtraLife getExtraLifepowerup(int i){return extralifepowerup.get(i);}
+    ExtraLifePowerup getExtraLifepowerup(int i){return extralifepowerup.get(i);}
     private static final int CLAY = 1;
     private static final int STEEL = 2;
     private static final int CEMENT = 3;
 
-    private ArrayList<ExtraLife> extralifepowerup = new ArrayList<>();
-    private ArrayList<Multiball> multiballpowerup  = new ArrayList<>();
+    private ArrayList<ExtraLifePowerup> extralifepowerup = new ArrayList<>();
+    private ArrayList<MultiballPowerup> multiballpowerup  = new ArrayList<>();
 
     int getmultiballpoweruplevelcount(){return multiballpoweruplevelcount[currentlevel-1];}
-    Multiball getMultiballpowerup(int i){return multiballpowerup.get(i);}
+    MultiballPowerup getMultiballpowerup(int i){return multiballpowerup.get(i);}
     Brick[] bricks;
 
     private Brick[][] levels;
@@ -149,10 +149,10 @@ public class Levels {
 
     public void nextPowerup(){
         for(int i=0; i<multiballpoweruplevelcount[currentlevel-1]; i++){
-            multiballpowerup.add(new Multiball());
+            multiballpowerup.add(new MultiballPowerup());
         }
         for(int i=0; i<extralifepoweruplevelcount[currentlevel-1]; i++){
-            extralifepowerup.add(new ExtraLife());
+            extralifepowerup.add(new ExtraLifePowerup());
         }
     }
 
@@ -182,7 +182,6 @@ public class Levels {
         wallReset();
         currentlevel = 0;
         bricks = levels[currentlevel];
-        System.out.println("Resetting level...");
         multiballpowerup.removeAll(multiballpowerup);
         extralifepowerup.removeAll(extralifepowerup);
         currentlevel += 1;

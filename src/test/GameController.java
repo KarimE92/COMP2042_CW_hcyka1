@@ -23,14 +23,14 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.Scanner;
 
-public class Game_Controller extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
+public class GameController extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
 
 
     private Timer gameTimer;
-    private Game_Model gameModel;
-    Game_Model getGame(){return gameModel;}
+    private GameModel gameModel;
+    GameModel getGame(){return gameModel;}
 
-    private Game_View GameView;
+    private test.GameView GameView;
 
 
     private boolean showPauseMenu;
@@ -54,11 +54,12 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
         }
         return data;
     }
-    public Game_Controller(JFrame owner){
+    boolean GameEnd = false;
+    public GameController(JFrame owner){
         super();
         showPauseMenu = false;
-        GameView = new Game_View(this);
-        gameModel = new Game_Model(new Rectangle(0,0,GameView.getwidth(),GameView.getheight()),30,4,6/2,new Point(300,430));
+        GameView = new GameView(this);
+        gameModel = new GameModel(new Rectangle(0,0,GameView.getwidth(),GameView.getheight()),30,4,6/2,new Point(300,430));
 
         debugConsole = new DebugConsole(owner, gameModel,this);
         //creating a savefile if it doesn't already exist
@@ -165,7 +166,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                         f.printStackTrace();
                     }
                     gameModel.toggleHighscoremenu();
-                    gameModel.ResetScore();
+                    GameEnd = true;
                 }
             }
             GameView.updatescreen(this);
@@ -174,7 +175,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
     }
 
 
-    Game_View GetGameView(){return GameView;}
+    test.GameView GetGameView(){return GameView;}
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {
@@ -203,6 +204,19 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                 gameTimer.stop();
                 break;
             case KeyEvent.VK_SPACE:
+                if (GameEnd){
+                    gameModel.getWall().resetLevel();
+                    gameModel.ResetPosition();
+                    gameModel.refreshWall();
+                    gameModel.getWall().wallReset();
+                    showPauseMenu = false;
+                    gameModel.ClearMiniBalls();
+                    gameModel.resetBallCount();
+                    GameView.updatescreen(this);
+                    GameEnd = false;
+                    gameModel.ResetScore();
+                    GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", gameModel.getWall().getBrickCount(), gameModel.getBallCount(), gameModel.GetScore()));
+                }
                 if(!showPauseMenu)
                     if(gameModel.gethighscoremenu()){
                         gameModel.toggleHighscoremenu();
