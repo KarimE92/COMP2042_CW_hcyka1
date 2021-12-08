@@ -43,7 +43,6 @@ public class Multiball extends Powerup{
     public boolean impact(Ball b){
         if (multiFace.contains(b.getPosition()) && (getshowmulti())){
             setshowmulti();
-            System.out.println("Collision detected");
             return true;
         }
             return false;

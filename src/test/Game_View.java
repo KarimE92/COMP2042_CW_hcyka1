@@ -53,7 +53,7 @@ public class Game_View extends JComponent {
 
     public void updatescreen(Game_Controller GameBoard){
         this.Controller = GameBoard;
-        this.Controller.getGame().IncrementScore((int)(this.Controller.getGame().ball.getSpeedX()));
+        this.Controller.getGame().IncrementScore((int)(this.Controller.getGame().getBall().getSpeedX()));
         repaint();
     }
     public void paint(Graphics g){
@@ -65,16 +65,21 @@ public class Game_View extends JComponent {
         g2d.setColor(Color.BLUE);
         g2d.drawString(message,250,225);
 
-        drawBall(Controller.getGame().ball,g2d);
-        if(Controller.getGame().wall.getMultiball().getshowmulti()) {
-            drawMulti(Controller.getGame().wall.getMultiball(), g2d);
+        drawBall(Controller.getGame().getBall(),g2d);
+        if(Controller.getGame().getWall().getMultiball().getshowmulti()) {
+            drawMulti(Controller.getGame().getWall().getMultiball(), g2d);
         }
 
-        for(Brick b : Controller.getGame().wall.bricks)
+        if (!Controller.getGame().getMiniBalls().isEmpty()){
+            for(int i=0; i<Controller.getGame().getMiniBalls().size(); i++){
+                drawMiniBall(Controller.getGame().getMiniBalls().get(i), g2d);
+            }
+        }
+        for(Brick b : Controller.getGame().getWall().bricks)
             if(!b.isBroken())
                 drawBrick(b,g2d);
 
-        drawPlayer(Controller.getGame().player,g2d);
+        drawPlayer(Controller.getGame().getPlayer(),g2d);
 
         if(Controller.getpausemenu())
             drawPauseMenu(g2d);
@@ -103,7 +108,21 @@ public class Game_View extends JComponent {
         g2d.setColor(tmp);
     }
 
-    private void drawBall(Ball ball,Graphics2D g2d){
+    private void drawBall(RubberBall ball,Graphics2D g2d){
+        Color tmp = g2d.getColor();
+
+        Shape s = ball.getBallFace();
+
+        g2d.setColor(ball.getInnerColor());
+        g2d.fill(s);
+
+        g2d.setColor(ball.getBorderColor());
+        g2d.draw(s);
+
+        g2d.setColor(tmp);
+    }
+
+    private void drawMiniBall(MiniBall ball,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
         Shape s = ball.getBallFace();

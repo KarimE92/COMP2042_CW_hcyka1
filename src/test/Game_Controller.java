@@ -81,20 +81,23 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
             e.printStackTrace();
         }
         //initialize the first level
-        gameModel.wall.nextLevel();
+        gameModel.getWall().nextLevel();
 
         gameTimer = new Timer(10,e ->{
             gameModel.move();
             gameModel.findImpacts();
-            GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", gameModel.wall.getBrickCount(), gameModel.getBallCount(), gameModel.GetScore()));
+            GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", gameModel.getWall().getBrickCount(), gameModel.getBallCount(), gameModel.GetScore()));
             if(gameModel.isBallLost()){
                 if(gameModel.ballEnd()){
                     //save the high score if it's above any currently existing high scores, and add their high score if there is none, and reset the score variable to zero
-                    gameModel.wall.wallReset();
+                    gameModel.getWall().wallReset();
                     gameModel.resetBallCount();
                     GameView.setmessage("Game Over");
-                    gameModel.wall.resetLevel();
+                    gameModel.ClearMiniBalls();
+
+                    gameModel.getWall().resetLevel();
                     gameModel.refreshWall();
+
                     try {
                         highscorelist = gethighscorelist();
                             int score = gameModel.GetScore();
@@ -125,13 +128,13 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                 gameModel.ResetPosition();
                 gameTimer.stop();
             }
-            else if(gameModel.wall.isDone()){
-                if(gameModel.wall.hasLevel()){
+            else if(gameModel.getWall().isDone()){
+                if(gameModel.getWall().hasLevel()){
                     GameView.setmessage("Go to Next Level");
                     gameTimer.stop();
                     gameModel.ResetPosition();
-                    gameModel.wall.wallReset();
-                    gameModel.wall.nextLevel();
+                    gameModel.getWall().wallReset();
+                    gameModel.getWall().nextLevel();
                 }
                 else{
                     GameView.setmessage("ALL WALLS DESTROYED");
@@ -155,16 +158,16 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
         switch(keyEvent.getKeyCode()){
             case KeyEvent.VK_A:
                 if (keyEvent.isShiftDown()){
-                    gameModel.player.sprintLeft();
+                    gameModel.getPlayer().sprintLeft();
                 }else {
-                    gameModel.player.moveLeft();
+                    gameModel.getPlayer().moveLeft();
                 }
                 break;
             case KeyEvent.VK_D:
                 if (keyEvent.isShiftDown()){
-                    gameModel.player.sprintRight();
+                    gameModel.getPlayer().sprintRight();
                 }else {
-                    gameModel.player.moveRight();
+                    gameModel.getPlayer().moveRight();
                 }
                 break;
             case KeyEvent.VK_ESCAPE:
@@ -188,13 +191,13 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                 if(keyEvent.isAltDown() && keyEvent.isShiftDown())
                     debugConsole.setVisible(true);
             default:
-                gameModel.player.stop();
+                gameModel.getPlayer().stop();
         }
     }
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        gameModel.player.stop();
+        gameModel.getPlayer().stop();
     }
 
     @Override
@@ -209,11 +212,12 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
         else if(GameView.getrestartButtonRect().contains(p)){
             GameView.setmessage("Restarting Game...");
             gameModel.ResetScore();
-            gameModel.wall.resetLevel();
+            gameModel.getWall().resetLevel();
             gameModel.ResetPosition();
             gameModel.refreshWall();
-            gameModel.wall.wallReset();
+            gameModel.getWall().wallReset();
             showPauseMenu = false;
+            gameModel.ClearMiniBalls();
             GameView.updatescreen(this);
         }
         else if(GameView.getexitButtonRect().contains(p)){
