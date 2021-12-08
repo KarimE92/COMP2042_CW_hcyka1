@@ -123,7 +123,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                         f.printStackTrace();
                     }
                     gameModel.toggleHighscoremenu();
-                    gameModel.ResetScore(); //just resetting the score. Ideally we would parse a text file and check if the current score exceeds any scores on the text file and replace them
+                    gameModel.ResetScore();
                 }
                 gameModel.ResetPosition();
                 gameTimer.stop();
@@ -140,6 +140,32 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
                 else{
                     GameView.setmessage("ALL WALLS DESTROYED");
                     gameTimer.stop();
+                    try {
+                        highscorelist = gethighscorelist();
+                        int score = gameModel.GetScore();
+                        int temp;
+                        for (int j =0; j<gameModel.getScoreLength(); j++) { //checking if our current score is higher than the highscores in the file
+                            if (score >= highscorelist[j]) {
+                                temp = highscorelist[j];
+                                highscorelist[j] = score;
+                                score = temp;
+                            }
+                        }
+                        FileWriter myWriter = new FileWriter("SaveFile.txt");
+                        BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
+                        for(int k=0; k<gameModel.getScoreLength(); k++) {
+                            myBufferedWriter.write(String.valueOf(highscorelist[k]));
+                            myBufferedWriter.newLine();
+                        }
+                        myBufferedWriter.close();
+
+
+                    } catch (IOException f) {
+                        System.out.println("An error occurred.");
+                        f.printStackTrace();
+                    }
+                    gameModel.toggleHighscoremenu();
+                    gameModel.ResetScore();
                 }
             }
             GameView.updatescreen(this);
@@ -219,6 +245,7 @@ public class Game_Controller extends JComponent implements KeyListener,MouseList
             gameModel.getWall().wallReset();
             showPauseMenu = false;
             gameModel.ClearMiniBalls();
+            gameModel.resetBallCount();
             GameView.updatescreen(this);
         }
         else if(GameView.getexitButtonRect().contains(p)){

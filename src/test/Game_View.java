@@ -68,7 +68,13 @@ public class Game_View extends JComponent {
         drawBall(Controller.getGame().getBall(),g2d);
         for(int i= 0; i<Controller.getGame().getWall().getmultiballpoweruplevelcount(); i++){
             if(Controller.getGame().getWall().getMultiballpowerup(i).getshowmulti()) {
-                drawMulti(Controller.getGame().getWall().getMultiballpowerup(i), g2d);
+                drawPowerup(Controller.getGame().getWall().getMultiballpowerup(i), g2d);
+            }
+        }
+
+        for(int i= 0; i<Controller.getGame().getWall().getextralifepoweruplevelcount(); i++){
+            if(Controller.getGame().getWall().getExtraLifepowerup(i).getshowextralife()) {
+                drawPowerup(Controller.getGame().getWall().getExtraLifepowerup(i), g2d);
             }
         }
 
@@ -139,19 +145,20 @@ public class Game_View extends JComponent {
         g2d.setColor(tmp);
     }
 
-    private void drawMulti(Multiball multiball,Graphics2D g2d){
+    private void drawPowerup(Powerup powerup,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
-        Shape s = multiball.getmultiFace();
+        Shape s = powerup.getmultiFace();
 
-        g2d.setColor(multiball.getInnerColor());
+        g2d.setColor(powerup.getInnerColor());
         g2d.fill(s);
 
-        g2d.setColor(multiball.getBorderColor());
+        g2d.setColor(powerup.getBorderColor());
         g2d.draw(s);
 
         g2d.setColor(tmp);
     }
+
 
     private void drawPlayer(Player p,Graphics2D g2d){
         Color tmp = g2d.getColor();

@@ -13,7 +13,7 @@ public class MiniBall extends Ball{
         super(center, radius);
 
 
-        Color inner = new Color(255, 0, 0); //Defining the colour of the ball
+        Color inner = new Color(0, 53, 255); //Defining the colour of the ball
         Color border = inner.darker().darker(); //Defining the border of the ball
         this.border = border;
         this.inner  = inner;

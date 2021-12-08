@@ -31,5 +31,9 @@ public class Powerup {
 
     public void resetFace(Point2D point){}
 
+    public Shape getmultiFace(){return null;}
 
+    public Color getInnerColor(){return null;}
+
+    public Color getBorderColor(){return null;}
 }

@@ -24,8 +24,8 @@ public class Game_Model {
     RubberBall getBall(){return ball;}
     private Player player;
     Player getPlayer(){return player;}
-    private Wall wall;
-    Wall getWall(){return wall;}
+    private Levels levels;
+    Levels getWall(){return levels;}
 
     private ArrayList<MiniBall> MiniBalls = new ArrayList<>();
     public ArrayList<MiniBall> getMiniBalls(){return MiniBalls;}
@@ -54,7 +54,7 @@ public class Game_Model {
     void toggleHighscoremenu(){highscoremenu = !(highscoremenu);}
 
     void refreshWall(){
-        for(Brick b : wall.bricks){
+        for(Brick b : levels.bricks){
             b.ResetScore();
         }
 
@@ -69,7 +69,7 @@ public class Game_Model {
 
         player = new Player((Point) ballPos.clone(),150,15, drawArea);
 
-        wall = new Wall(drawArea,brickCount,lineCount,brickDimensionRatio);
+        levels = new Levels(drawArea,brickCount,lineCount,brickDimensionRatio);
 
         area = drawArea;
 
@@ -77,7 +77,7 @@ public class Game_Model {
 
 
         ResetPosition();
-        //create wall of bricks
+        //create levels of bricks
         //create player
         //create ball
         //move player and ball
@@ -103,18 +103,25 @@ public class Game_Model {
 
 
     public void findImpacts() {
-        for(int i= 0; i<wall.getmultiballpoweruplevelcount(); i++){
-            if (wall.getMultiballpowerup(i).impact(ball)) { //checking if ball collides with powerup
-                for (int j = 0; j < 3; j++) {
-                    Point MiniBallCenter = new Point((int)((ball.getPosition()).getX() + j), (int)ball.getPosition().getY() + j);
-                    MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
-                }
-            }
-            for(int j=0; j<MiniBalls.size(); j++){ //checking if miniball collides with powerup
-                if (wall.getMultiballpowerup(i).impact(MiniBalls.get(j))){
+        for(int i = 0; i< levels.getmultiballpoweruplevelcount(); i++){
+            for(int j = 0; j< levels.getextralifepoweruplevelcount(); j++) {
+                if (levels.getMultiballpowerup(i).impact(ball)) { //checking if ball collides with powerup
                     for (int k = 0; k < 3; k++) {
-                        Point MiniBallCenter = new Point((int)((MiniBalls.get(j).getPosition()).getX() + k), (int)MiniBalls.get(j).getPosition().getY() + k);
+                        Point MiniBallCenter = new Point((int) ((ball.getPosition()).getX() + k), (int) ball.getPosition().getY() + k);
                         MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+                    }
+                } else if (levels.getExtraLifepowerup(i).impact(ball)) {
+                    ballCount++;
+                }
+
+                for (int k = 0; k < MiniBalls.size(); k++) { //checking if miniball collides with powerup
+                    if (levels.getMultiballpowerup(i).impact(MiniBalls.get(k))) {
+                        for (int l = 0; l < 3; l++) {
+                            Point MiniBallCenter = new Point((int) ((MiniBalls.get(j).getPosition()).getX() + l), (int) MiniBalls.get(j).getPosition().getY() + l);
+                            MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
+                        }
+                    } else if (levels.getExtraLifepowerup(i).impact(MiniBalls.get(k))) {
+                        ballCount++;
                     }
                 }
             }
@@ -127,8 +134,8 @@ public class Game_Model {
             ball.reverseY();
         }
         if (impactWall(ball)) {
-            wall.BrickCollision();
-            for (Brick b : wall.bricks) {
+            levels.BrickCollision();
+            for (Brick b : levels.bricks) {
                 if (b.findImpact(ball) != 0) {
                     IncrementScore(b.GetScore());
                     b.SetScore();
@@ -156,8 +163,8 @@ public class Game_Model {
                 }
 
                 if (impactWall(MiniBalls.get(i))) {
-                    wall.BrickCollision();
-                    for (Brick b : wall.bricks) {
+                    levels.BrickCollision();
+                    for (Brick b : levels.bricks) {
                         if (b.findImpact(MiniBalls.get(i)) != 0) {
                             IncrementScore(b.GetScore());
                             b.SetScore();
@@ -177,7 +184,7 @@ public class Game_Model {
 
 
     boolean impactWall(Ball ball){
-        for(Brick b : wall.bricks){
+        for(Brick b : levels.bricks){
             switch(b.findImpact(ball)) {
                 //Vertical Impact
                 case Brick.UP_IMPACT:
