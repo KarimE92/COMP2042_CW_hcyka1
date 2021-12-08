@@ -15,6 +15,9 @@ public class Game_Model {
 
     private Point startPoint; //the starting point of the level
 
+    private int BallRadius = 15;
+    private int MiniBallRadius = 10;
+
 
     private Random rnd;
     private Rectangle area;
@@ -46,8 +49,12 @@ public class Game_Model {
     }
     public int GetScore(){return Score;}
 
-    private int BallRadius = 10;
-    private int MiniBallRadius = 5;
+
+
+
+
+
+
     boolean highscoremenu;
     boolean gethighscoremenu(){return highscoremenu;}
     void toggleHighscoremenu(){highscoremenu = !(highscoremenu);}
@@ -66,8 +73,7 @@ public class Game_Model {
         ballCount = 3;
         ballLost = false;
 
-        rnd = new Random();
-        player = new Player((Point) ballPos.clone(),150,10, drawArea);
+        player = new Player((Point) ballPos.clone(),150,15, drawArea);
 
         wall = new Wall(drawArea,brickCount,lineCount,brickDimensionRatio);
 
@@ -91,56 +97,34 @@ public class Game_Model {
     }
 
     public void move(){
-        if (!MiniBalls.isEmpty()){
-            for (int i = 0; i < MiniBalls.size(); i++) {
-                MiniBalls.get(i).move();
+
+        for (int i = 0; i < MiniBalls.size(); i++) {
+                (MiniBalls.get(i)).move();
             }
-        }
-        player.move();
+
+        ball.accelerate();
         ball.move();
-        System.out.println(ball.getPosition());
-        System.out.println(ball.getSpeedY());
+
+        player.move();
 
     }
 
 
-    public void findImpacts(){
-        if(wall.getMultiball().impact(ball)){
-            for(int i=0; i<3; i++) {
-                MiniBalls.add(new MiniBall(ball.getCenter(), MiniBallRadius));
-            }
-        }
-        if (!MiniBalls.isEmpty()) {
-            for (int i = 0; i < MiniBalls.size(); i++) {
-                if (player.impact(MiniBalls.get(i))) {
-                    MiniBalls.get(i).reverseY();
-                }
+    public void findImpacts() {
+        if (wall.getMultiball().impact(ball)) {
+            for (int i = 0; i < 3; i++) {
+                Point MiniBallCenter = new Point((int)((ball.getPosition()).getX() + i), (int)ball.getPosition().getY() + i);
+                MiniBalls.add(new MiniBall(MiniBallCenter, MiniBallRadius));
             }
         }
 
-        if(player.impact(ball)){
+        //ball collision logic
+        if (player.impact(ball)) {
             ball.reverseY();
         }
-
-        if (!MiniBalls.isEmpty()) {
-            for (int i = 0; i < MiniBalls.size(); i++) {
-                if (impactWall(MiniBalls.get(i))) {
-                    wall.BrickCollision();
-                    for(Brick b : wall.bricks) {
-                        if (b.findImpact(ball) != 0) {
-                            IncrementScore(b.GetScore());
-                            b.SetScore();
-                        }
-                    }
-                }
-            }
-        }
-        if(impactWall(ball)){
-            /*for efficiency reverse is done into method impactWall
-             * because for every brick program checks for horizontal and vertical impacts
-             */
+        if (impactWall(ball)) {
             wall.BrickCollision();
-            for(Brick b : wall.bricks) {
+            for (Brick b : wall.bricks) {
                 if (b.findImpact(ball) != 0) {
                     IncrementScore(b.GetScore());
                     b.SetScore();
@@ -148,25 +132,46 @@ public class Game_Model {
             }
         }
 
-        if(impactBorder(ball)) {
+        if (impactBorder(ball)) {
             ball.reverseX();
         }
+
+                if (ball.getPosition().getY() < area.getY()) {
+                    ball.reverseY();
+                }
+                if (ball.getPosition().getY() > area.getY() + area.getHeight()) {
+                    ballCount--;
+                    ballLost = true;
+                    ClearMiniBalls();
+                }
+                //Miniball collision logic
         if (!MiniBalls.isEmpty()) {
             for (int i = 0; i < MiniBalls.size(); i++) {
+                if (player.impact(MiniBalls.get(i))) {
+                    MiniBalls.get(i).reverseY();
+                }
+
+                if (impactWall(MiniBalls.get(i))) {
+                    wall.BrickCollision();
+                    for (Brick b : wall.bricks) {
+                        if (b.findImpact(MiniBalls.get(i)) != 0) {
+                            IncrementScore(b.GetScore());
+                            b.SetScore();
+                        }
+                    }
+                }
                 if (impactBorder(MiniBalls.get(i))) {
                     MiniBalls.get(i).reverseX();
                 }
+                if(MiniBalls.get(i).getPosition().getY() < area.getY()){
+                    MiniBalls.get(i).reverseY();
+                }
+
             }
         }
-        if(ball.getPosition().getY() < area.getY()){
-            ball.reverseY();
-        }
-        if(ball.getPosition().getY() > area.getY() + area.getHeight()){
-                ballCount--;
-                ballLost = true;
-                ClearMiniBalls();
-        }
     }
+
+
     boolean impactWall(Ball ball){
         for(Brick b : wall.bricks){
             switch(b.findImpact(ball)) {
@@ -203,6 +208,7 @@ public class Game_Model {
     public void ResetPosition(){
         player.moveTo(startPoint);
         ball.moveTo(startPoint);
+        rnd = new Random();
         float speedX,speedY;
         do{
             speedX = rnd.nextInt(5) - 2;

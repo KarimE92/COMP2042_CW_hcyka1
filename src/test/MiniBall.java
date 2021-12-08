@@ -2,11 +2,13 @@ package test;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.RectangularShape;
+import java.util.Random;
 
 public class MiniBall extends Ball{
     private Color border;
     private Color inner;
-    private final int MAXMINISPEED = 2;
+    private Random rnd;
     public MiniBall(Point2D center, int radius) {
         super(center, radius);
 
@@ -15,7 +17,15 @@ public class MiniBall extends Ball{
         Color border = inner.darker().darker(); //Defining the border of the ball
         this.border = border;
         this.inner  = inner;
-        this.setSpeed((int)(Math.random() * (MAXMINISPEED)) + 0, (int)(Math.random() * (MAXMINISPEED)) + 0);
+
+
+        rnd = new Random();
+        do{
+            setXSpeed(rnd.nextInt(5) - 2);
+        }while(getSpeedX() == 0);
+        do{
+            setYSpeed(-rnd.nextInt(3));
+        }while(getSpeedY() == 0);
         System.out.println("X Speed: " +getSpeedX());
         System.out.println("Y Speed: " +getSpeedY());
     }
