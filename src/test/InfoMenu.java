@@ -21,7 +21,7 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
     private Font instructionsFont;
 
 
-    private static final Color BG_COLOR = Color.GREEN.darker();
+    private static final Color BG_COLOR = Color.BLACK.darker();
     private static final Color TEXT_COLOR = new Color(255, 0, 0);//egyptian blue
     private static final Color CLICKED_BUTTON_COLOR = BG_COLOR.brighter();
     private static final Color CLICKED_TEXT = Color.WHITE;
@@ -70,7 +70,8 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
     }
 
     public void drawMenu(Graphics2D g2d){
-        g2d.drawImage(Title_Image, 1, 1, (int)(menuFace.getWidth()), (int)(menuFace.getHeight()), this);
+        g2d.setColor(BG_COLOR);
+        g2d.fill(menuFace);
 
         drawText(g2d);
         drawButton(g2d);

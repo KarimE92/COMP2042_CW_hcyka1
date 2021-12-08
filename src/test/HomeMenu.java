@@ -30,12 +30,12 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
     private static final String GREETINGS = "Welcome to:";
     private static final String GAME_TITLE = "Brick Destroy";
-    private static final String CREDITS = "Version 0.1";
+    private static final String CREDITS = "Version 1.0";
     private static final String START_TEXT = "Start";
     private static final String EXIT_TEXT = "Exit";
     private static final String INFO_TEXT = "Info";
 
-    private static final Color BG_COLOR = Color.GREEN.darker();
+    private static final Color BG_COLOR = Color.RED.darker();
     private static final Color TEXT_COLOR = new Color(255, 0, 0);//egyptian blue
     private static final Color CLICKED_BUTTON_COLOR = BG_COLOR.brighter();
     private static final Color CLICKED_TEXT = Color.WHITE;
@@ -144,9 +144,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         Rectangle2D txtRect = buttonFont.getStringBounds(START_TEXT,frc);
         Rectangle2D eTxtRect = buttonFont.getStringBounds(EXIT_TEXT,frc);
         Rectangle2D iTxtRect = buttonFont.getStringBounds(INFO_TEXT, frc);
-
         g2d.setFont(buttonFont);
-
         int x = (menuFace.width - startButton.width) / 2;
         int y =(int) ((menuFace.height - startButton.height) * 0.65);
 
@@ -170,7 +168,11 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
             g2d.setColor(tmp);
         }
         else{
+            g2d.setColor(Color.WHITE);
+            g2d.fill(startButton);
+            g2d.setColor(Color.RED);
             g2d.draw(startButton);
+
             g2d.drawString(START_TEXT,x,y);
         }
 
@@ -200,6 +202,9 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
             g2d.setColor(tmp);
         }
         else{
+            g2d.setColor(Color.WHITE);
+            g2d.fill(exitButton);
+            g2d.setColor(Color.RED);
             g2d.draw(exitButton);
             g2d.drawString(EXIT_TEXT,x,y);
         }
@@ -230,6 +235,9 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
             g2d.setColor(tmp);
         }
         else{
+            g2d.setColor(Color.WHITE);
+            g2d.fill(infoButton);
+            g2d.setColor(Color.RED);
             g2d.draw(infoButton);
             g2d.drawString(INFO_TEXT,x,y);
         }
