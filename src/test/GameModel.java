@@ -1,10 +1,13 @@
 package test;
 
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 
 /**
@@ -12,7 +15,11 @@ import java.util.Random;
  * @author Karim
  * @since 2021/12/09
  */
-public class GameModel {
+public class GameModel extends JComponent {
+    private final int brickCount = 30;
+    private final int lineCount = 4;
+    private final float brickDimensionRatio = 6/2;
+    private final Point StartingPos = new Point(300,430);
     private final int ballRadius = 15;
     private static final int ScoreLength = 5;
     private final int StartingLives = 3;
@@ -29,23 +36,32 @@ public class GameModel {
     private int Score;
     private boolean highscoremenu;
 
+
+
+    private Rectangle drawArea;
+    private Timer gameTimer;
+    private final test.GameView GameView;
+    private final test.GameController GameController;
+    private final DebugConsole debugConsole;
+    boolean GameEnd = false;
+    int[] highscorelist;
+
     /**
      * GameModel is the constructor method for the GameModel class. It creates the ball,player,levels and the area we play the game in
-     * @param drawArea the area we play the game in
-     * @param brickCount the number of bricks for the level
-     * @param lineCount the number of lines of bricks for the level
-     * @param brickDimensionRatio the size of the bricks
-     * @param ballPos the coordinates of the ball's starting position
+
      */
-    protected GameModel(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {
+    protected GameModel(JFrame owner) {
+        super();
+        GameController = new GameController(this);
+        GameView = new GameView(this, GameController);
+        GameController.SetGameView(GameView);
+        this.startPoint = new Point(StartingPos);
 
-        this.startPoint = new Point(ballPos);
-
-        makeBall(ballPos);
+        makeBall(StartingPos);
         ballCount = 3;
         ballLost = false;
-
-        player = new Player((Point) ballPos.clone(),150,15, drawArea);
+        drawArea = new Rectangle(0,0,GameView.getwidth(),GameView.getheight());
+        player = new Player((Point) StartingPos.clone(),150,15, drawArea);
 
         levels = new Levels(drawArea,brickCount,lineCount,brickDimensionRatio);
 
@@ -53,6 +69,118 @@ public class GameModel {
 
 
         ResetPosition();
+        debugConsole = new DebugConsole(owner, this,GameController);
+        //creating a savefile if it doesn't already exist
+        try {
+            File SaveFile = new File("SaveFile.txt");
+            if (SaveFile.createNewFile()) {
+                System.out.println("File created: " + SaveFile.getName());
+                FileWriter myWriter = new FileWriter(SaveFile.getName());
+                BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
+                for(int i=0; i<getScoreLength(); i++) {
+                    myBufferedWriter.write("0 ");
+                    myBufferedWriter.newLine();
+                }
+                myBufferedWriter.close();
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        //initialize the first level
+        getLevels().nextLevel();
+
+        gameTimer = new Timer(10,e ->{
+            move();
+            findImpacts();
+            GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", getLevels().getBrickCount(), getBallCount(), GetScore()));
+            if(isBallLost()){
+                if(ballEnd()){
+                    //save the high score if it's above any currently existing high scores, and add their high score if there is none, and reset the score variable to zero
+                    getLevels().wallReset();
+                    resetBallCount();
+                    GameView.setmessage("Game Over");
+                    ClearMiniBalls();
+
+                    getLevels().resetLevel();
+                    refreshWall();
+
+                    try {
+                        highscorelist = gethighscorelist();
+                        int score = GetScore();
+                        int temp;
+                        for (int j =0; j<getScoreLength(); j++) { //checking if our current score is higher than the highscores in the file
+                            if (score >= highscorelist[j]) {
+                                temp = highscorelist[j];
+                                highscorelist[j] = score;
+                                score = temp;
+                            }
+                        }
+                        FileWriter myWriter = new FileWriter("SaveFile.txt");
+                        BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
+                        for(int k=0; k<getScoreLength(); k++) {
+                            myBufferedWriter.write(String.valueOf(highscorelist[k]));
+                            myBufferedWriter.newLine();
+                        }
+                        myBufferedWriter.close();
+                        toggleHighscoremenu();
+                        ResetScore();
+
+
+                    } catch (IOException f) {
+                        System.out.println("An error occurred.");
+                        f.printStackTrace();
+                    }
+
+                }
+                ResetPosition();
+                gameTimer.stop();
+            }
+            else if(getLevels().isDone()){
+                if(getLevels().hasLevel()){
+                    GameView.setmessage("Go to Next Level");
+                    gameTimer.stop();
+                    ResetPosition();
+                    getLevels().wallReset();
+                    getLevels().nextLevel();
+                    ClearMiniBalls();
+                }
+                else{
+                    GameView.setmessage("ALL WALLS DESTROYED");
+                    gameTimer.stop();
+                    try {
+                        highscorelist = gethighscorelist();
+                        int score = GetScore();
+                        int temp;
+                        for (int j =0; j<getScoreLength(); j++) { //checking if our current score is higher than the highscores in the file
+                            if (score >= highscorelist[j]) {
+                                temp = highscorelist[j];
+                                highscorelist[j] = score;
+                                score = temp;
+                            }
+                        }
+                        FileWriter myWriter = new FileWriter("SaveFile.txt");
+                        BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
+                        for(int k=0; k<getScoreLength(); k++) {
+                            myBufferedWriter.write(String.valueOf(highscorelist[k]));
+                            myBufferedWriter.newLine();
+                        }
+                        myBufferedWriter.close();
+
+
+                    } catch (IOException f) {
+                        System.out.println("An error occurred.");
+                        f.printStackTrace();
+                    }
+                    toggleHighscoremenu();
+                    GameEnd = true;
+                }
+            }
+            GameView.updatescreen(GameController);
+        });
+
 
     }
 
@@ -335,6 +463,34 @@ public class GameModel {
 
     }
 
+    /**
+     * gethighscorelist opens a savefile which stores all the highscores and copies them into an array that it then returns
+     * @return the array of highscores
+     * @throws FileNotFoundException in case the savefile does not exist
+     */
+    int[] gethighscorelist() throws FileNotFoundException {
+        int[] data = new int[getScoreLength()];
+        try {
+            File SaveFile = new File("SaveFile.txt");
+            Scanner myReader = new Scanner(SaveFile);
+            for (int i = 0; i < getScoreLength(); i++) { //adding all the highscores to a list
+                data[i] = myReader.nextInt();
+            }
+            myReader.close();
+        }catch (IOException f) {
+            System.out.println("An error occurred.");
+            f.printStackTrace();
+        }
+        return data;
+    }
+
+    DebugConsole getdebugConsole(){return debugConsole;}
+
+    GameView getGameView(){return GameView;}
+
+    GameController getGameController(){return GameController;}
+
+    Timer getGameTimer(){return gameTimer;}
 
 
 }

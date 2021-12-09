@@ -23,6 +23,7 @@ public class GameView extends JComponent {
     private int strLen;
 
     private String message;
+    private GameModel Model;
     private GameController Controller;
     private Font menuFont;
     private Rectangle continueButtonRect;
@@ -34,7 +35,8 @@ public class GameView extends JComponent {
      * GameView is the constructor method of the GameView class. It sets up the game screen and the opening message for the game, as well as save the GameController
      * @param GameController the game's main controls
      */
-    protected GameView(GameController GameController) {
+    protected GameView(GameModel GameModel, GameController GameController) {
+        Model = GameModel;
         Controller = GameController;
         strLen = 0;
         message = "Press Spacebar to Start!";
@@ -213,7 +215,7 @@ public class GameView extends JComponent {
         g2d.setFont(menuFont);
         g2d.setColor(MENU_COLOR);
 
-        int[] highscores = Controller.gethighscorelist();
+        int[] highscores = Model.gethighscorelist();
 
         int x = (this.getWidth() - strLen) / 3;
         int y = this.getHeight() / 10;
