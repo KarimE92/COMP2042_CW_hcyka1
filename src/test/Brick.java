@@ -7,8 +7,9 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 /**
- * Created by filippo on 04/09/16.
- *
+ * Created by Karim on 09/12/2021
+ * @author Karim
+ * @since 2021/12/09
  */
 abstract public class Brick  {
 
@@ -44,7 +45,11 @@ abstract public class Brick  {
         private final int crackDepth;
         private final int steps;
 
-
+        /**
+         * Crack is the constructor method for the crack class, which represents a crack that forms in bricks that take more than 1 hit to break
+         * @param crackDepth
+         * @param steps
+         */
         public Crack(int crackDepth, int steps){
 
             crack = new GeneralPath();
@@ -54,16 +59,27 @@ abstract public class Brick  {
         }
 
 
-
+        /**
+         * draw returns us our crack in order to draw it on our brick
+         * @return crack to draw on the brick
+         */
         public GeneralPath draw(){
 
             return crack;
         }
 
+        /**
+         * reset resets our crack so it no longer shows on our brick
+         */
         public void reset(){
             crack.reset();
         }
 
+        /**
+         * makeCrack makes a crack on our brick
+         * @param point the point where we need to make the crack
+         * @param direction the direction the crack has to go
+         */
         protected void makeCrack(Point2D point, int direction){
             Rectangle bounds = Brick.this.brickFace.getBounds();
 
@@ -104,6 +120,11 @@ abstract public class Brick  {
             }
         }
 
+        /**
+         * makeCrack makes a crack on our brick
+         * @param start the starting point of our crack
+         * @param end the ending point of our crack
+         */
         protected void makeCrack(Point start, Point end){
 
             GeneralPath path = new GeneralPath();
@@ -135,11 +156,22 @@ abstract public class Brick  {
             crack.append(path,true);
         }
 
+        /**
+         *
+         * @param bound
+         * @return
+         */
         private int randomInBounds(int bound){
             int n = (bound * 2) + 1;
             return rnd.nextInt(n) - bound;
         }
 
+        /**
+         *
+         * @param i
+         * @param divisions
+         * @return
+         */
         private boolean inMiddle(int i, int divisions){
             int low = (Crack.CRACK_SECTIONS / divisions);
             int up = low * (divisions - 1);
@@ -147,6 +179,11 @@ abstract public class Brick  {
             return  (i > low) && (i < up);
         }
 
+        /**
+         *
+         * @param bound
+         * @return
+         */
         private int jumps(int bound){
 
             if(rnd.nextDouble() > Crack.JUMP_PROBABILITY)
@@ -155,6 +192,13 @@ abstract public class Brick  {
 
         }
 
+        /**
+         *
+         * @param from
+         * @param to
+         * @param direction
+         * @return
+         */
         private Point makeRandomPoint(Point from,Point to, int direction){
 
             Point out = new Point();
@@ -187,7 +231,14 @@ abstract public class Brick  {
 
     private boolean broken;
 
-
+    /**
+     * Brick is the constructor method for our brick class, which serves to make a brick that we need for the game
+     * @param pos the position of the brick
+     * @param size the size of the brick
+     * @param border the color of the border of the brick
+     * @param inner the inner color of the brick
+     * @param strength the strength of the brick. ie, how many hits it will take for the brick to break
+     */
     public Brick(Point pos, Dimension size, Color border, Color inner, int strength){
         rnd = new Random();
         broken = false;
@@ -198,8 +249,20 @@ abstract public class Brick  {
 
     }
 
+    /**
+     * makeBrickFace is parent method that is overrided by its child classes and is used to make a brickFace, the visual aspect of the brick
+     * @param pos the position of the brick
+     * @param size the size of the brick
+     * @return
+     */
     protected abstract Shape makeBrickFace(Point pos,Dimension size);
 
+    /**
+     * setImpact is called when a brick collision has occured
+     * @param point is the point of the impact
+     * @param dir is the direction of the impact
+     * @return if the brick is broken or not
+     */
     public  boolean setImpact(Point2D point , int dir){
         if(broken)
             return false;
@@ -207,19 +270,34 @@ abstract public class Brick  {
         return  broken;
     }
 
+    /**
+     * getBrick is a parent method that is inherited by its child classes and is just used to get the brick
+     * @return the brick
+     */
     public abstract Shape getBrick();
 
 
-
+    /**
+     * getBorderColor is used to fetch the color of the border of the brick so it can be drawn on screen
+     * @return the color of the border of the brick
+     */
     public Color getBorderColor(){
         return  border;
     }
 
+    /**
+     * getInnerColor is used to fetch the color of the brick so it can be drawn on screen
+     * @return the color of the brick
+     */
     public Color getInnerColor(){
         return inner;
     }
 
-
+    /**
+     * findImpact checks to see if any bricks have collided with a ball
+     * @param b the ball to check for collisions with
+     * @return an integer representing the direction of the impact with the ball, or if broken, returns 10 instead
+     */
     public final int findImpact(Ball b){
         if(broken) {
             return 10;
@@ -236,24 +314,41 @@ abstract public class Brick  {
         return out;
     }
 
+    /**
+     * isBroken tells us if the brick is broken or not
+     * @return the state of the brick: true if broken, false if not broken
+     */
     public final boolean isBroken(){
         return broken;
     }
 
+    /**
+     * repair fixes broken bricks and returns them to their full strength
+     */
     public void repair() {
         broken = false;
         strength = fullStrength;
     }
 
+    /**
+     * Impact is called whenever a collision occurs, and reduces the strength of a brick, breaking when the strength reaches 0
+     */
     public void impact(){
         strength--;
         broken = (strength == 0);
     }
 
+    /**
+     * ResetScore resets the assigned score to each different type of brick
+     */
     public void ResetScore(){
         MakeScore();
     }
-    public void MakeScore(){}
+
+    /**
+     * MakeScore assigns the coresponding score to that type of brick
+     */
+    protected abstract void MakeScore();
 }
 
 

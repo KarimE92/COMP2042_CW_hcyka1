@@ -20,37 +20,70 @@ package test;
 import java.awt.*;
 import java.util.ArrayList;
 
-
+/**
+ * Created by Karim on 09/12/2021
+ * @author Karim
+ * @since 2021/12/09
+ */
 public class Levels {
 
     private static final int LEVELS_COUNT = 10;
     private final int[] multiballpoweruplevelcount = new int[]{0, 1, 1, 2, 2, 3, 3, 4, 4, 5};
     private final int[] extralifepoweruplevelcount = new int[]{0, 1, 1, 2, 2, 3, 3, 4, 4, 5};
-    int getextralifepoweruplevelcount(){return extralifepoweruplevelcount[currentlevel-1];}
-    ExtraLifePowerup getExtraLifepowerup(int i){return extralifepowerup.get(i);}
     private static final int CLAY = 1;
     private static final int STEEL = 2;
     private static final int CEMENT = 3;
 
     private final ArrayList<ExtraLifePowerup> extralifepowerup = new ArrayList<>();
     private final ArrayList<MultiballPowerup> multiballpowerup  = new ArrayList<>();
-
-    int getmultiballpoweruplevelcount(){return multiballpoweruplevelcount[currentlevel-1];}
-    MultiballPowerup getMultiballpowerup(int i){return multiballpowerup.get(i);}
     Brick[] bricks;
-
     private final Brick[][] levels;
     private int currentlevel;
-
-
     private int brickCount;
 
-
-
+    /**
+     * Levels is the constructor method for the Levels class. It calls the makeLevels method
+     * @param drawArea the area the levels must encompass
+     * @param brickCount the number of bricks for the level
+     * @param lineCount the number of rows of bricks for the level
+     * @param brickDimensionRatio the size of the bricks
+     */
     protected Levels(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio){
         levels = makeLevels(drawArea,brickCount,lineCount,brickDimensionRatio);
     }
 
+    /**
+     * makeLevels creates the levels for the game by creating an array which represents a wall of bricks that should be loaded and drawn
+     * @param drawArea the area the levels must encompass
+     * @param brickCount the number of bricks for the level
+     * @param lineCount the number of rows of bricks for the level
+     * @param brickDimensionRatio the size of the bricks
+     * @return the 2D array of bricks so that levels can be generated from it
+     */
+    private Brick[][] makeLevels(Rectangle drawArea,int brickCount,int lineCount,double brickDimensionRatio){
+        Brick[][] Level = new Brick[LEVELS_COUNT][];
+        Level[0] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
+        Level[1] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
+        Level[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
+        Level[3] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CEMENT);
+        Level[4] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CEMENT,STEEL);
+        Level[5] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL);
+        Level[6] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY, STEEL, CEMENT);
+        Level[7] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
+        Level[8] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio, CEMENT, STEEL, STEEL);
+        Level[9] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio, STEEL, CEMENT, CEMENT);
+        return Level;
+    }
+
+    /**
+     * makeSingleTypeLevel makes a level using only 1 type of brick
+     * @param drawArea the area the levels must encompass
+     * @param brickCnt the number of bricks for the level
+     * @param lineCnt the number of rows of bricks for the level
+     * @param brickSizeRatio the size of the bricks
+     * @param type the type of brick the level should be made from
+     * @return an array of bricks that represents the level
+     */
     private Brick[] makeSingleTypeLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, int type){
         /*
           if brickCount is not divisible by line count,brickCount is adjusted to the biggest
@@ -91,6 +124,16 @@ public class Levels {
 
     }
 
+    /**
+     * makeChessboardLevel creates a level using 2 types of bricks, where the bricks alternate in type
+     * @param drawArea the area the levels must encompass
+     * @param brickCnt the number of bricks for the level
+     * @param lineCnt the number of rows of bricks for the level
+     * @param brickSizeRatio the size of the bricks
+     * @param typeA the first type of brick the level should be made from
+     * @param typeB the second type of brick the level should be made from
+     * @return an array of bricks that represents the level
+     */
     private Brick[] makeChessboardLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, int typeA, int typeB){
         /*
           if brickCount is not divisible by line count,brickCount is adjusted to the biggest
@@ -136,6 +179,17 @@ public class Levels {
         return tmp;
     }
 
+    /**
+     * makeStripesLevel creates a level using 3 types of bricks, where each row of bricks is its own type
+     * @param drawArea the area the levels must encompass
+     * @param brickCnt the number of bricks for the level
+     * @param lineCnt the number of rows of bricks for the level
+     * @param brickSizeRatio the size of the bricks
+     * @param typeA the first type of brick the level should be made from
+     * @param typeB the second type of brick the level should be made from
+     * @param typeC the third type of brick the level should be made from
+     * @return an array of bricks that represents the level
+     */
     private Brick[] makeStripesLevel(Rectangle drawArea, int brickCnt, int lineCnt, double brickSizeRatio, int typeA, int typeB, int typeC){
         /*
           if brickCount is not divisible by line count,brickCount is adjusted to the biggest
@@ -191,24 +245,10 @@ public class Levels {
     }
 
 
-
-
-    private Brick[][] makeLevels(Rectangle drawArea,int brickCount,int lineCount,double brickDimensionRatio){
-        Brick[][] Level = new Brick[LEVELS_COUNT][];
-        Level[0] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
-        Level[1] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY);
-        Level[2] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY,CEMENT);
-        Level[3] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CEMENT);
-        Level[4] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CEMENT,STEEL);
-        Level[5] = makeSingleTypeLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL);
-        Level[6] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio,CLAY, STEEL, CEMENT);
-        Level[7] = makeChessboardLevel(drawArea,brickCount,lineCount,brickDimensionRatio,STEEL,CEMENT);
-        Level[8] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio, CEMENT, STEEL, STEEL);
-        Level[9] = makeStripesLevel(drawArea,brickCount,lineCount,brickDimensionRatio, STEEL, CEMENT, CEMENT);
-        return Level;
-    }
-
-    public void nextPowerup(){
+    /**
+     * nextLevelPowerup generates the powerups to be used for the next level
+     */
+    public void nextLevelPowerup(){
         for(int i=0; i<multiballpoweruplevelcount[currentlevel-1]; i++){
             multiballpowerup.add(new MultiballPowerup());
         }
@@ -217,28 +257,43 @@ public class Levels {
         }
     }
 
+    /**
+     * getBrickCount gets us the number of unbroken bricks in the level to display to the player
+     * @return the number of unbroken bricks in the current level
+     */
     public int getBrickCount(){
         return brickCount;
     }
 
-
+    /**
+     * BrickCollision is ran whenever a brick breaks. It decrements brickCount to keep brickCount up to date
+     */
     public void BrickCollision(){
         brickCount--;
     }
 
+    /**
+     * isDone tells us if the level has ended as a result of all the bricks being destroyed
+     * @return true if brickCount is 0 (all the bricks have been destroyed)
+     */
     public boolean isDone(){
         return brickCount == 0;
     }
 
+    /**
+     * nextLevel loads the next level by loading the next level's bricks into the brick variable, updating brickCount, and spawning in the powerups for the level
+     */
     public void nextLevel(){
         bricks = levels[currentlevel++];
         brickCount = bricks.length;
         multiballpowerup.removeAll(multiballpowerup);
         extralifepowerup.removeAll(extralifepowerup);
-        nextPowerup();
+        nextLevelPowerup();
     }
 
-
+    /**
+     * resetLevel resets the level by resetting the brick wall, going back to the first level, and spawning the first level's powerups
+     */
     public void resetLevel(){
         wallReset();
         currentlevel = 0;
@@ -246,20 +301,34 @@ public class Levels {
         multiballpowerup.removeAll(multiballpowerup);
         extralifepowerup.removeAll(extralifepowerup);
         currentlevel += 1;
-        nextPowerup();
+        nextLevelPowerup();
 
     }
 
+    /**
+     * hasLevel tells us if there is a next level
+     * @return true if the currentlevel is less than the total number of levels (if we aren't on the final level)
+     */
     public boolean hasLevel(){
         return currentlevel < levels.length;
     }
 
+    /**
+     * wallReset loops through all the bricks in the current level and repairs them one by one, and then resets brickCount
+     */
     public void wallReset(){
         for(Brick b : bricks)
             b.repair();
         brickCount = bricks.length;
     }
 
+    /**
+     * makeBrick creates a brick of the coresponding type
+     * @param point the coordinates where the brick should be created
+     * @param size the size of the brick
+     * @param type the type of brick to be created
+     * @return the brick after it's created
+     */
     private Brick makeBrick(Point point, Dimension size, int type){
         return switch (type) {
             case CLAY -> new ClayBrick(point, size);
@@ -269,4 +338,29 @@ public class Levels {
         };
     }
 
+    /**
+     * getextralifepoweruplevelcount gives us the number of extralifepowerups we need to spawn for the current level
+     * @return the number of extralifepowerups to create for the current level
+     */
+    int getextralifepoweruplevelcount(){return extralifepoweruplevelcount[currentlevel-1];}
+
+    /**
+     * getExtraLifepowerup gets us the extralifepowerup we need from an array of extralifepowerups
+     * @param i the position of the extralifepowerup we want in the array
+     * @return the extralifepowerup for us to handle collisions with
+     */
+    ExtraLifePowerup getExtraLifepowerup(int i){return extralifepowerup.get(i);}
+
+    /**
+     * getmultiballpoweruplevelcount gives us the number of multiballpowerups we need to spawn for the current level
+     * @return the number of multiballpowerups to create for the current level
+     */
+    int getmultiballpoweruplevelcount(){return multiballpoweruplevelcount[currentlevel-1];}
+
+    /**
+     * getMultiBallpowerup gets us the multiballpowerup we need from an array of multiballpowerups
+     * @param i the position of the mulitballpowerup we want in the array
+     * @return the multiballpowerup for us to handle collisions with
+     */
+    MultiballPowerup getMultiballpowerup(int i){return multiballpowerup.get(i);}
 }

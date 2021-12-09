@@ -1,20 +1,3 @@
-/*
- *  Brick Destroy - A simple Arcade video game
- *   Karim Elbishouty
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package test;
 
 import javax.swing.*;
@@ -22,7 +5,11 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
-
+/**
+ * Created by Karim on 09/12/2021
+ * @author Karim
+ * @since 2021/12/09
+ */
 public class GameFrame extends JFrame implements WindowFocusListener {
 
     private static final String DEF_TITLE = "Brick Destroy";
@@ -31,6 +18,9 @@ public class GameFrame extends JFrame implements WindowFocusListener {
     private final HomeMenu homeMenu;
     private boolean gaming;
 
+    /**
+     * GameFrame is the constructor method for the GameFrame class. It creates a window, makes it non-resizable, initializes gameBoard, homeMenu and InfoMenu and displays homeMenu
+     */
     public GameFrame(){
         super();
         setResizable(false); //the game is not resizable
@@ -50,6 +40,9 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
     }
 
+    /**
+     * initialize sets up the window's title, defines what happens when the window is closed, and makes the window visible
+     */
     public void initialize(){
         this.setTitle(DEF_TITLE);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -58,6 +51,9 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.setVisible(true);
     }
 
+    /**
+     * enableGameBoard removes the homeMenu and displays the gameBoard to start playing the game
+     */
     public void enableGameBoard(){
         this.dispose();
         this.remove(homeMenu);
@@ -69,6 +65,9 @@ public class GameFrame extends JFrame implements WindowFocusListener {
 
     }
 
+    /**
+     * enableInfoMenu removes the homeMenu and displays the infoMenu
+     */
     public void enableInfoMenu(){
         this.dispose();
         this.remove(homeMenu);
@@ -77,6 +76,9 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         initialize();
     }
 
+    /**
+     * enableHomeMenu removes the InfoMenu and displays the homemenu
+     */
     public void enableHomeMenu(){
         this.dispose();
         this.remove(InfoMenu);
@@ -84,6 +86,10 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.setUndecorated(false);
         initialize();
     }
+
+    /**
+     * autoLocate automatically locates the game's window
+     */
     private void autoLocate(){
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (size.width - this.getWidth()) / 2;
@@ -91,12 +97,19 @@ public class GameFrame extends JFrame implements WindowFocusListener {
         this.setLocation(x,y);
     }
 
-
+    /**
+     * windowGainedFocus makes the game run again when you focus back on the window
+     * @param windowEvent variable representing the event that has occurred to the window
+     */
     @Override
     public void windowGainedFocus(WindowEvent windowEvent) {
         gaming = true;
     }
 
+    /**
+     * windowLostFocus makes the game stop running when you foucs away from the window by calling a method in gameBoard
+     * @param windowEvent variable representing the event that has occurred to the window
+     */
     @Override
     public void windowLostFocus(WindowEvent windowEvent) {
         if(gaming)

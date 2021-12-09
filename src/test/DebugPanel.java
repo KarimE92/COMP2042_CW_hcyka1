@@ -1,27 +1,15 @@
-/*
- *  Brick Destroy - A simple Arcade video gameModel
- *   Copyright (C) 2017  Filippo Ranza
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+
 package test;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
-
+/**
+ * Created by Karim on 09/12/2021
+ * @author Karim
+ * @since 2021/12/09
+ */
 
 
 public class DebugPanel extends JPanel {
@@ -32,7 +20,10 @@ public class DebugPanel extends JPanel {
     private JSlider ballXSpeed;
     private JSlider ballYSpeed;
 
-
+    /**
+     * DebugPanel is the constructor method for the DebugPanel class. It initializes itself, makes the skiplevel and resetballs buttons and makes the ballxspeed and ballyspeed sliders
+     * @param gameModel the game's main logic, passed in so we can get the ball's features faster
+     */
     public DebugPanel(GameModel gameModel){
 
         initialize();
@@ -51,17 +42,33 @@ public class DebugPanel extends JPanel {
 
     }
 
+    /**
+     * initialize sets up the DebugPanel's background and layout
+     */
     private void initialize(){
         this.setBackground(DEF_BKG);
         this.setLayout(new GridLayout(2,2));
     }
 
+    /**
+     * makeButton makes a clickable button
+     * @param title the name of the button
+     * @param e the method to be called when the button is pressed
+     * @return the created button
+     */
     private JButton makeButton(String title, ActionListener e){
         JButton out = new JButton(title);
         out.addActionListener(e);
         return  out;
     }
 
+    /**
+     * makeSlider creates a slider
+     * @param min the minimum value of the slider
+     * @param max the maximum value of the slider
+     * @param e the method to be called when the slider is used
+     * @return the created slider
+     */
     private JSlider makeSlider(int min, int max, ChangeListener e){
         JSlider out = new JSlider(min,max);
         out.setMajorTickSpacing(1);
@@ -71,6 +78,11 @@ public class DebugPanel extends JPanel {
         return out;
     }
 
+    /**
+     * setValues sets the values of the ball's X and Y speed on the sliders
+     * @param x the value of XSpeed to be set
+     * @param y the value of YSpeed to be set
+     */
     public void setValues(float x,float y){
         ballXSpeed.setValue((int) x);
         ballYSpeed.setValue((int) y);

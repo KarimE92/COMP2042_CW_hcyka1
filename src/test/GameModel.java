@@ -1,8 +1,5 @@
 package test;
-/* GameModel should be the main game's internal logic
-It should be able to setup the initial level by calling a class, move the ball and the player,
-and setup the next level when the current level ends
-*/
+
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -10,51 +7,36 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-
+/**
+ * Created by Karim on 09/12/2021
+ * @author Karim
+ * @since 2021/12/09
+ */
 public class GameModel {
+    private final int ballRadius = 15;
+    private static final int ScoreLength = 5;
+    private final int StartingLives = 3;
 
 
+    private RubberBall ball;
+    private final Player player;
+    private final Levels levels;
     private final Point startPoint; //the starting point of the level
     private final Rectangle area;
-    private RubberBall ball;
-    RubberBall getBall(){return ball;}
-    private final Player player;
-    Player getPlayer(){return player;}
-    private final Levels levels;
-    Levels getLevels(){return levels;}
-
     private final ArrayList<MiniBall> MiniBalls = new ArrayList<>();
-    public ArrayList<MiniBall> getMiniBalls(){return MiniBalls;}
-    public void ClearMiniBalls(){MiniBalls.removeAll(MiniBalls);}
     private int ballCount;
     private boolean ballLost;
-    private static final int ScoreLength = 5;
-    int getScoreLength(){return ScoreLength;}
     private int Score;
-    public void IncrementScore(int value){
-        Score += Math.abs(value);
-    }
-    public void ResetScore(){
-        Score = 0;
-    }
-    public int GetScore(){return Score;}
+    private boolean highscoremenu;
 
-
-
-
-
-
-
-    boolean highscoremenu;
-    boolean gethighscoremenu(){return highscoremenu;}
-    void toggleHighscoremenu(){highscoremenu = !(highscoremenu);}
-
-    void refreshWall(){
-        for(Brick b : levels.bricks){
-            b.ResetScore();
-        }
-
-    }
+    /**
+     * GameModel is the constructor method for the GameModel class. It creates the ball,player,levels and the area we play the game in
+     * @param drawArea the area we play the game in
+     * @param brickCount the number of bricks for the level
+     * @param lineCount the number of lines of bricks for the level
+     * @param brickDimensionRatio the size of the bricks
+     * @param ballPos the coordinates of the ball's starting position
+     */
     protected GameModel(Rectangle drawArea, int brickCount, int lineCount, double brickDimensionRatio, Point ballPos) {
 
         this.startPoint = new Point(ballPos);
@@ -70,21 +52,21 @@ public class GameModel {
         area = drawArea;
 
 
-
-
         ResetPosition();
-        //create levels of bricks
-        //create player
-        //create ball
-        //move player and ball
 
     }
 
+    /**
+     * makeBall creates a new ball
+     * @param ballPos the position of the ball to be made
+     */
     private void makeBall(Point2D ballPos){
-        int ballRadius = 15;
         ball = new RubberBall(ballPos, ballRadius);
     }
 
+    /**
+     * move moves the miniballs if there are any, accelerates then moves the ball, and moves the player
+     */
     public void move(){
 
         for (MiniBall miniBall : MiniBalls) {
@@ -98,7 +80,9 @@ public class GameModel {
 
     }
 
-
+    /**
+     * findImpacts checks for collisions between powerups and ball, powerups and miniballs, bricks and ball, bricks and miniballs, player and ball, player and miniball, the borders of the game and ball, the borders and miniball
+     */
     public void findImpacts() {
         for(int i = 0; i< levels.getmultiballpoweruplevelcount(); i++){
             for(int j = 0; j< levels.getextralifepoweruplevelcount(); j++) {
@@ -180,7 +164,11 @@ public class GameModel {
         }
     }
 
-
+    /**
+     * impactWall loops through all the bricks to detect a collision, and if one is detected determines how the ball should move after a collision
+     * @param ball the ball being checked for collisions
+     * @return true if a collision occurred
+     */
     boolean impactWall(Ball ball){
         for(Brick b : levels.bricks){
             //Vertical Impact
@@ -206,14 +194,21 @@ public class GameModel {
         }
         return false;
     }
+
+    /**
+     * impact border checks if there was a collision between the ball and the border of the screen
+     * @param ball the ball being checked for collisions
+     * @return true if a collision occurred
+     */
     private boolean impactBorder(Ball ball){
         Point2D p = ball.getPosition();
         return ((p.getX() < area.getX()) ||(p.getX() > (area.getX() + area.getWidth())));
     }
 
 
-
-
+    /**
+     * ResetPosition returns the player and the ball to their starting positions, and randomly determines the ball's speed
+     */
     public void ResetPosition(){
         player.moveTo(startPoint);
         ball.moveTo(startPoint);
@@ -232,19 +227,114 @@ public class GameModel {
     }
 
 
-
+    /**
+     * getBallCount gives us the number of balls (lives) we have left
+     * @return the number of lives we have left
+     */
     public int getBallCount(){
         return ballCount;
     }
+
+    /**
+     * resetBallCount resets our number of lives back to the default number
+     */
     public void resetBallCount(){
-        ballCount = 3;
+        ballCount = StartingLives;
     }
+
+    /**
+     * ballEnd tells us if we are out of lives
+     * @return true if ballCount is 0 (we have no more lives)
+     */
     public boolean ballEnd(){
         return ballCount == 0;
     }
+
+    /**
+     * isBallLost tells us if our ball is offscreen
+     * @return true if ball is offscreen
+     */
     public boolean isBallLost(){
         return ballLost;
     }
+
+    /**
+     * gets us our ball so we can use it in collision detection
+     * @return ball
+     */
+    RubberBall getBall(){return ball;}
+
+    /**
+     * gets us our player so we can use it in collision detection
+     * @return player
+     */
+    Player getPlayer(){return player;}
+
+    /**
+     * gets us our levels so we can use the bricks in collision detection
+     * @return levels
+     */
+    Levels getLevels(){return levels;}
+
+    /**
+     * gets us our array of miniballs so we can use them in collision detection
+     * @return
+     */
+    public ArrayList<MiniBall> getMiniBalls(){return MiniBalls;}
+
+    /**
+     * ClearMiniBalls removes all the MiniBalls currently in the MiniBalls array for the next level
+     */
+    public void ClearMiniBalls(){MiniBalls.removeAll(MiniBalls);}
+
+    /**
+     * getScoreLength gets us how many scores are displayed in the highscore file
+     * @return how many scores can be displayed in the highscore file
+     */
+    int getScoreLength(){return ScoreLength;}
+
+    /**
+     * IncrementScore ups our score by a certain value
+     * @param value the value the score is increased by
+     */
+    public void IncrementScore(int value){
+        Score += Math.abs(value);
+    }
+
+    /**
+     * ResetScore resets our score to 0
+     */
+    public void ResetScore(){
+        Score = 0;
+    }
+
+    /**
+     * GetScore gets us our current score
+     * @return current score
+     */
+    public int GetScore(){return Score;}
+
+    /**
+     * gethighscoremenu gets us highscoremenu which tells us if we should display highscoremenu
+     * @return highscoremenu
+     */
+    boolean gethighscoremenu(){return highscoremenu;}
+
+    /**
+     * toggleHighscoremenu makes highscoremenu false if it's true and vice versa
+     */
+    void toggleHighscoremenu(){highscoremenu = !(highscoremenu);}
+
+    /**
+     * refreshWall loops through every single brick in the level and resets its score
+     */
+    void refreshWall(){
+        for(Brick b : levels.bricks){
+            b.ResetScore();
+        }
+
+    }
+
 
 
 }

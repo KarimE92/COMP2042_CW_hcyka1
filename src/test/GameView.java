@@ -4,58 +4,63 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.io.FileNotFoundException;
-
+/**
+ * Created by Karim on 09/12/2021
+ * @author Karim
+ * @since 2021/12/09
+ */
 public class GameView extends JComponent {
-
-    private String message;
-    void setmessage(String string){message = string; }
+    private static final int DEF_WIDTH = 600;
+    private static final int DEF_HEIGHT = 450;
+    private static final Color MENU_COLOR = new Color(0, 255, 0); //pause menu colour
+    private static final int TEXT_SIZE = 30;
+    private static final Color BG_COLOR = Color.WHITE;
 
     private static final String CONTINUE = "Continue";
     private static final String RESTART = "Restart";
     private static final String EXIT = "Exit";
     private static final String PAUSE = "Pause Menu";
-    private static final int TEXT_SIZE = 30;
-    private static final Color MENU_COLOR = new Color(0, 255, 0); //pause menu colour
     private int strLen;
 
+    private String message;
     private GameController Controller;
-
-    private static final int DEF_WIDTH = 600;
-    int getwidth(){return DEF_WIDTH;}
-    private static final int DEF_HEIGHT = 450;
-    int getheight(){return DEF_HEIGHT;}
-
-    private static final Color BG_COLOR = Color.WHITE;
-
     private Font menuFont;
-
     private Rectangle continueButtonRect;
-    Rectangle getcontinueButtonRect(){return continueButtonRect;}
     private Rectangle exitButtonRect;
-    Rectangle getexitButtonRect(){return exitButtonRect;}
     private Rectangle restartButtonRect;
-    Rectangle getrestartButtonRect(){return restartButtonRect;}
 
 
-    protected GameView(GameController GameBoard) {
-        Controller = GameBoard;
+    /**
+     * GameView is the constructor method of the GameView class. It sets up the game screen and the opening message for the game, as well as save the GameController
+     * @param GameController the game's main controls
+     */
+    protected GameView(GameController GameController) {
+        Controller = GameController;
         strLen = 0;
         message = "Press Spacebar to Start!";
         menuFont = new Font("Monospaced",Font.PLAIN,TEXT_SIZE);
         this.setPreferredSize(new Dimension(DEF_WIDTH, DEF_HEIGHT));
         this.setFocusable(true);
         this.requestFocusInWindow();
-        this.addKeyListener(GameBoard);
-        this.addMouseListener(GameBoard);
-        this.addMouseMotionListener(GameBoard);
-
+        this.addKeyListener(GameController);
+        this.addMouseListener(GameController);
+        this.addMouseMotionListener(GameController);
     }
 
-    public void updatescreen(GameController GameBoard){
-        this.Controller = GameBoard;
+    /**
+     * updatescreen is called every frame. If updates the controller, increments the score, and repaints the entire screen
+     * @param GameController the game's main controls
+     */
+    public void updatescreen(GameController GameController){
+        this.Controller = GameController;
         this.Controller.getGame().IncrementScore((int)(this.Controller.getGame().getBall().getSpeedX()));
         repaint();
     }
+
+    /**
+     * paint draws all the visual aspects of the game. It draws the ball, then the powerups if there are any, then miniballs if there are any, then bricks, then the player. If the pause menu is on it draws the pause menu, and if the highscore menu is on it draws the highscore menu
+     * @param g the graphics to paint the game with
+     */
     public void paint(Graphics g){
 
         Graphics2D g2d = (Graphics2D) g;
@@ -104,6 +109,11 @@ public class GameView extends JComponent {
         Toolkit.getDefaultToolkit().sync();
     }
 
+    /**
+     * drawBrick draws all the bricks on screen. It fills the part of the screen the brick should be in with the brick's color
+     * @param brick the brick to draw on screen
+     * @param g2d the graphics to paint the game with
+     */
     private void drawBrick(Brick brick,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
@@ -117,6 +127,11 @@ public class GameView extends JComponent {
         g2d.setColor(tmp);
     }
 
+    /**
+     * drawBall draws the main ball on screen by filling the specific area the ball is in with the ball's color
+     * @param ball the ball to be drawn on screen
+     * @param g2d the graphics used to paint the game with
+     */
     private void drawBall(RubberBall ball,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
@@ -131,6 +146,11 @@ public class GameView extends JComponent {
         g2d.setColor(tmp);
     }
 
+    /**
+     * drawMiniBall draws a miniball by filling the specific area the miniball is in with the miniball's color
+     * @param ball the miniball to be drawn on screen
+     * @param g2d the graphics used to paint the game with
+     */
     private void drawMiniBall(MiniBall ball,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
@@ -145,6 +165,11 @@ public class GameView extends JComponent {
         g2d.setColor(tmp);
     }
 
+    /**
+     * drawPowerup draws a powerup by filling the specific area the powerup is in with the powerup's color
+     * @param powerup the powerup to be drawn on screen
+     * @param g2d the graphics used to paint the game with
+     */
     private void drawPowerup(Powerup powerup,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
@@ -159,7 +184,11 @@ public class GameView extends JComponent {
         g2d.setColor(tmp);
     }
 
-
+    /**
+     * drawPlayer draws the player by filling the specific area the player is in with the player's color
+     * @param p the player
+     * @param g2d the graphics used to paint the game with
+     */
     private void drawPlayer(Player p,Graphics2D g2d){
         Color tmp = g2d.getColor();
 
@@ -174,9 +203,13 @@ public class GameView extends JComponent {
     }
 
 
-
+    /**
+     * drawHighScore draws the high score menu by opening a file containing all the saved highscores and outputting that on screen
+     * @param g2d the graphics used to draw the game in
+     * @throws FileNotFoundException in case the savefile containing high scores is not found
+     */
     private void drawHighScore(Graphics2D g2d) throws FileNotFoundException {
-        obscureGameBoard(g2d);
+        obscureGameController(g2d);
         g2d.setFont(menuFont);
         g2d.setColor(MENU_COLOR);
 
@@ -195,11 +228,16 @@ public class GameView extends JComponent {
 
         x= (this.getWidth() - strLen) / 4;
         y= 400;
-        g2d.drawString("Press Space to Exit", x, y);
+        g2d.drawString("Press Space to Restart", x, y);
 
     }
+
+    /**
+     * drawPauseMenu draws the pause menu and all the buttons included in the pause menu
+     * @param g2d the graphics used to paint the game in
+     */
     private void drawPauseMenu(Graphics2D g2d){
-        obscureGameBoard(g2d);
+        obscureGameController(g2d);
         Font tmpFont = g2d.getFont();
         Color tmpColor = g2d.getColor();
 
@@ -253,6 +291,10 @@ public class GameView extends JComponent {
         g2d.setColor(tmpColor);
     }
 
+    /**
+     * clear clears all the colors currently stored in g2d and resets them to default
+     * @param g2d the graphics used to paint the game with
+     */
     void clear(Graphics2D g2d){
         Color tmp = g2d.getColor();
         g2d.setColor(BG_COLOR);
@@ -260,7 +302,11 @@ public class GameView extends JComponent {
         g2d.setColor(tmp);
     }
 
-    void obscureGameBoard(Graphics2D g2d){
+    /**
+     * obscureGameController is called to dim the screen whenever a new screen has to be displayed. ie the pause menu or the highscore menu
+     * @param g2d the graphics used to paint the game with
+     */
+    void obscureGameController(Graphics2D g2d){
 
         Composite tmp = g2d.getComposite();
         Color tmpColor = g2d.getColor();
@@ -275,6 +321,41 @@ public class GameView extends JComponent {
         g2d.setColor(tmpColor);
     }
 
+    /**
+     * setmessage changes the message to be displayed on screen
+     * @param string the message to be displayed on screen
+     */
+    void setmessage(String string){message = string; }
+
+    /**
+     * getwidth gives us the width of the game's window
+     * @return the game's width
+     */
+    int getwidth(){return DEF_WIDTH;}
+
+    /**
+     * getheight gives us the height of the game's window
+     * @return the game's height
+     */
+    int getheight(){return DEF_HEIGHT;}
+
+    /**
+     * getcontinueButtonRect gives us the continue button's rectangle to draw on the screen
+     * @return continue button's rectangle
+     */
+    Rectangle getcontinueButtonRect(){return continueButtonRect;}
+
+    /**
+     * getexitButtonRect gives us the exit button's rectangle to draw on the screen
+     * @return exit button's rectangle
+     */
+    Rectangle getexitButtonRect(){return exitButtonRect;}
+
+    /**
+     * getrestartButtonRect gives us the restart button's rectangle to draw on the screen
+     * @return restart button's rectangle
+     */
+    Rectangle getrestartButtonRect(){return restartButtonRect;}
 }
 
 

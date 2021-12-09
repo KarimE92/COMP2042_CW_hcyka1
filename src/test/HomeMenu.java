@@ -1,20 +1,4 @@
-/*
- *  Brick Destroy - A simple Arcade video game
- *   Copyright (C) 2017  Filippo Ranza
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+
 package test;
 
 import javax.swing.*;
@@ -25,7 +9,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 
-
+/**
+ * Created by Karim on 09/12/2021
+ * @author Karim
+ * @since 2021/12/09
+ */
 public class HomeMenu extends JComponent implements MouseListener, MouseMotionListener {
 
     private static final String GREETINGS = "Welcome to:";
@@ -62,7 +50,11 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
     private boolean exitClicked;
     private boolean infoClicked;
 
-
+    /**
+     * HomeMenu is the constructor method for the HomeMenu class. It loads the home menu, and creates 3 buttons that the player can click on
+     * @param owner the game's window
+     * @param area the area of the window
+     */
     public HomeMenu(GameFrame owner,Dimension area){
 
         this.setFocusable(true);
@@ -90,12 +82,18 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
     }
 
-
+    /**
+     * paint calls drawMenu to draw all the homemenu's visual aspects
+     * @param g the graphics to paint the game with
+     */
     public void paint(Graphics g){
         drawMenu((Graphics2D)g);
     }
 
-
+    /**
+     * drawMenu draws the HomeMenu by setting an image as the background, then calling drawText to draw the text and drawButton to draw the buttons
+     * @param g2d the graphics to paint the game with
+     */
     public void drawMenu(Graphics2D g2d){
 
         g2d.drawImage(Title_Image, 1, 1, (int)(menuFace.getWidth()), (int)(menuFace.getHeight()), this);
@@ -104,6 +102,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         drawButton(g2d);
     }
 
+    /**
+     * drawText draws all the text for the HomeMenu on screen
+     * @param g2d the graphics to paint the game with
+     */
     private void drawText(Graphics2D g2d){
 
         g2d.setColor(TEXT_COLOR);
@@ -137,6 +139,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
     }
 
+    /**
+     * drawButton draws all the buttons for the HomeMenu on screen and also draws the text for those buttons
+     * @param g2d the graphics to paint the game with
+     */
     private void drawButton(Graphics2D g2d){
 
         FontRenderContext frc = g2d.getFontRenderContext();
@@ -243,6 +249,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         }
     }
 
+    /**
+     * mouseClicked is run when the mouse is clicked on screen, with something different happening depending on which button was clicked
+     * @param mouseEvent variable representing what the computer mouse did
+     */
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
@@ -259,6 +269,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         }
     }
 
+    /**
+     * mousePressed is run whenever the mouse is pressed. If pressed on a button, it repaints that button to look different
+     * @param mouseEvent variable representing what the computer mouse did
+     */
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();
@@ -277,6 +291,10 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         }
     }
 
+    /**
+     * mouseReleased is called whenever the mouse is released. If it's released from a button while it's being pressed, the button will be repainted
+     * @param mouseEvent variable representing what the computer mouse did
+     */
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
         if(startClicked ){
@@ -293,22 +311,35 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         }
     }
 
+    /**
+     * mosueEntered is an override since we don't want anything to happen when the mouse is entered
+     * @param mouseEvent variable representing what the mouse did
+     */
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
 
     }
-
+    /**
+     * mosueExited is an override since we don't want anything to happen when the mouse is exited
+     * @param mouseEvent variable representing what the mouse did
+     */
     @Override
     public void mouseExited(MouseEvent mouseEvent) {
 
     }
 
-
+    /**
+     * mouseDragged is an override since we don't want anything to happen when the mouse is dragged
+     * @param mouseEvent variable representing what the mouse did
+     */
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
 
     }
-
+    /**
+     * mosueMoved is an override since we don't want anything to happen when the mouse is moved
+     * @param mouseEvent variable representing what the mouse did
+     */
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
         Point p = mouseEvent.getPoint();

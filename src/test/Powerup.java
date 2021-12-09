@@ -1,22 +1,32 @@
 package test;
 import java.awt.*;
 import java.awt.geom.Point2D;
-
-public class Powerup {
-
+/**
+ * Created by Karim on 09/12/2021
+ * @author Karim
+ * @since 2021/12/09
+ */
+public abstract class Powerup {
     private Point2D center;
 
+    /**
+     * Powerup is the constructor method for the Powerup class. It calls the resetPowerup method
+     */
     public Powerup(){
- //random x and y coords between a certain range
         resetPowerup();
-        //from here you can have a method that makes the power up's face that would inherit from this class
     }
 
+    /**
+     * getPosition gives us the coordinates of the powerup to draw on screen and to handle collisions with
+     * @return the position of the powerup
+     */
     public Point2D getPosition(){
         return center;
     }
 
-
+    /**
+     * resetPowerup generates random coordinates for the powerup and then creates a face to be displayed to the user at those coordinates
+     */
     public void resetPowerup(){
         int minX = 50;
         int maxX = 550;
@@ -28,11 +38,27 @@ public class Powerup {
         resetFace(getPosition());
     }
 
-    public void resetFace(Point2D point){}
+    /**
+     * resetFace creates the face of the powerup to be displayed to the user
+     * @param point is the coordinates where the face should be located
+     */
+    protected abstract void resetFace(Point2D point);
 
-    public Shape getmultiFace(){return null;}
+    /**
+     * getmultiFace gets us the face of the powerup to be displayed to the user
+     * @return the face of the powerup
+     */
+    protected abstract Shape getmultiFace();
 
-    public Color getInnerColor(){return null;}
+    /**
+     * getInnerColor gets us the color of the powerup to be displayed to the user
+     * @return the color of the powerup
+     */
+    protected abstract Color getInnerColor();
 
-    public Color getBorderColor(){return null;}
+    /**
+     * getBorderColor gets us the color of the border of the powerup to be displayed to the user
+     * @return the color of the border of the powerup
+     */
+    protected abstract Color getBorderColor();
 }
