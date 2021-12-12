@@ -5,9 +5,10 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.io.FileNotFoundException;
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 public class GameView extends JComponent {
     private static final int DEF_WIDTH = 600;
@@ -33,6 +34,7 @@ public class GameView extends JComponent {
 
     /**
      * GameView is the constructor method of the GameView class. It sets up the game screen and the opening message for the game, as well as save the GameController
+     * @param GameModel is the game's main logic
      * @param GameController the game's main controls
      */
     protected GameView(GameModel GameModel, GameController GameController) {

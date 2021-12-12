@@ -5,9 +5,10 @@ import java.awt.Point;
 
 
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 public class ClayBrick extends Brick {
 
@@ -31,7 +32,7 @@ public class ClayBrick extends Brick {
      * makeBrickFace creates the face of the brick, the visual component of the brick to be shown to the player
      * @param pos the position of the brick
      * @param size the size of the brick
-     * @return
+     * @return the face of the brick
      */
     @Override
     protected Shape makeBrickFace(Point pos, Dimension size) {

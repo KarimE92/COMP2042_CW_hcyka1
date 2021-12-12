@@ -3,9 +3,10 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 public class MultiballPowerup extends Powerup{
     private final int radius = 16;

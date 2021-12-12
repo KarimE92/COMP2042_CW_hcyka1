@@ -5,9 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 public class GameController extends JComponent implements KeyListener,MouseListener,MouseMotionListener {
 
@@ -22,7 +23,7 @@ public class GameController extends JComponent implements KeyListener,MouseListe
 
     /**
      * GameController is the constructor method for the GameController class. It creates the GameView and GameModel, checks if a highscore savefile exists and creates one if it doesn't, initializes the first level, controls the gameTimer, and keeps track of if the game ends, saving the player's score if it's a new highscore, displaying the highscore, and restarting the game
-     *
+     * @param GameModel the logic of the game
      */
     public GameController(GameModel GameModel){
         gameModel = GameModel;
@@ -30,6 +31,10 @@ public class GameController extends JComponent implements KeyListener,MouseListe
 
     }
 
+    /**
+     * SetGameView stores the GameView to be used by the controller
+     * @param GameView the visual components of the game
+     */
     public void SetGameView(GameView GameView){gameView = GameView;}
 
 

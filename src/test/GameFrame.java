@@ -6,9 +6,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 public class GameFrame extends JFrame implements WindowFocusListener {
 

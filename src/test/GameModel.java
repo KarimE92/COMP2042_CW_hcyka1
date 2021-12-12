@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 public class GameModel extends JComponent {
     private final int brickCount = 30;
@@ -38,15 +38,15 @@ public class GameModel extends JComponent {
 
 
     private Timer gameTimer;
-    private final test.GameView GameView;
-    private final test.GameController GameController;
+    private final GameView GameView;
+    private final GameController GameController;
     private final DebugConsole debugConsole;
     boolean GameEnd = false;
     int[] highscorelist;
 
     /**
      * GameModel is the constructor method for the GameModel class. It creates the ball,player,levels and the area we play the game in
-
+     * @param owner is the window of the game
      */
     protected GameModel(JFrame owner) {
         super();

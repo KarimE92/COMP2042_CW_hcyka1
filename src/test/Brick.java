@@ -7,9 +7,10 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 abstract public class Brick  {
 
@@ -23,8 +24,7 @@ abstract public class Brick  {
     public static final int RIGHT_IMPACT = 400;
 
     int Score;
-    public int GetScore(){return Score;}
-    public void SetScore(){Score =0;}
+
 
     public class Crack{
 
@@ -326,7 +326,19 @@ abstract public class Brick  {
      * MakeScore assigns the coresponding score to that type of brick
      */
     protected abstract void MakeScore();
+
+    /**
+     * GetScore gets us the brick's score to add to the player's score
+     * @return the score of the brick
+     */
+    public int GetScore(){return Score;}
+
+    /**
+     * SetScore sets the brick's score to 0 and is called after the brick is destroyed so its score is not added again
+     */
+    public void SetScore(){Score =0;}
 }
+
 
 
 

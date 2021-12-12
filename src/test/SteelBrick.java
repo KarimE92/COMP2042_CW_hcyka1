@@ -1,20 +1,4 @@
-/*
- *  Brick Destroy - A simple Arcade video game
- *   Copyright (C) 2017  Filippo Ranza
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+
 package test;
 
 import java.awt.*;
@@ -23,9 +7,10 @@ import java.util.Random;
 
 
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 public class SteelBrick extends Brick {
 
@@ -74,7 +59,7 @@ public class SteelBrick extends Brick {
      * setImpact is called when a brick collision occurs, and it checks if a brick is broken, if not it impacts it, and if it's still not broken it makes a crack on the brick
      * @param point is the point of the impact
      * @param dir is the direction of the impact
-     * @return
+     * @return whether or not there was an impact
      */
     public  boolean setImpact(Point2D point , int dir){
         if(super.isBroken())

@@ -5,9 +5,10 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 
 /**
- * Created by Karim on 09/12/2021
+ * Created by Karim Elbishouty on 9/12/2021
  * @author Karim
- * @since 2021/12/09
+ * @since 2021-12-09
+ *
  */
 public class CementBrick extends Brick {
 
@@ -47,7 +48,7 @@ public class CementBrick extends Brick {
      * setImpact is called when a brick collision occurs, and it checks if a brick is broken, if not it impacts it, and if it's still not broken it makes a crack on the brick
      * @param point is the point of the impact
      * @param dir is the direction of the impact
-     * @return
+     * @return whether or not there was an impact
      */
     @Override
     public boolean setImpact(Point2D point, int dir) {
