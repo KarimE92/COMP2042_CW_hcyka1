@@ -37,8 +37,6 @@ public class GameModel extends JComponent {
     private boolean highscoremenu;
 
 
-
-    private Rectangle drawArea;
     private Timer gameTimer;
     private final test.GameView GameView;
     private final test.GameController GameController;
@@ -60,7 +58,7 @@ public class GameModel extends JComponent {
         makeBall(StartingPos);
         ballCount = 3;
         ballLost = false;
-        drawArea = new Rectangle(0,0,GameView.getwidth(),GameView.getheight());
+        Rectangle drawArea = new Rectangle(0, 0, GameView.getwidth(), GameView.getheight());
         player = new Player((Point) StartingPos.clone(),150,15, drawArea);
 
         levels = new Levels(drawArea,brickCount,lineCount,brickDimensionRatio);
@@ -72,19 +70,7 @@ public class GameModel extends JComponent {
         debugConsole = new DebugConsole(owner, this,GameController);
         //creating a savefile if it doesn't already exist
         try {
-            File SaveFile = new File("SaveFile.txt");
-            if (SaveFile.createNewFile()) {
-                System.out.println("File created: " + SaveFile.getName());
-                FileWriter myWriter = new FileWriter(SaveFile.getName());
-                BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
-                for(int i=0; i<getScoreLength(); i++) {
-                    myBufferedWriter.write("0 ");
-                    myBufferedWriter.newLine();
-                }
-                myBufferedWriter.close();
-            } else {
-                System.out.println("File already exists.");
-            }
+            createSaveFile();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -98,7 +84,6 @@ public class GameModel extends JComponent {
             GameView.setmessage(String.format("Bricks: %d Balls %d Score: %d", getLevels().getBrickCount(), getBallCount(), GetScore()));
             if(isBallLost()){
                 if(ballEnd()){
-                    //save the high score if it's above any currently existing high scores, and add their high score if there is none, and reset the score variable to zero
                     getLevels().wallReset();
                     resetBallCount();
                     GameView.setmessage("Game Over");
@@ -108,32 +93,11 @@ public class GameModel extends JComponent {
                     refreshWall();
 
                     try {
-                        highscorelist = gethighscorelist();
-                        int score = GetScore();
-                        int temp;
-                        for (int j =0; j<getScoreLength(); j++) { //checking if our current score is higher than the highscores in the file
-                            if (score >= highscorelist[j]) {
-                                temp = highscorelist[j];
-                                highscorelist[j] = score;
-                                score = temp;
-                            }
-                        }
-                        FileWriter myWriter = new FileWriter("SaveFile.txt");
-                        BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
-                        for(int k=0; k<getScoreLength(); k++) {
-                            myBufferedWriter.write(String.valueOf(highscorelist[k]));
-                            myBufferedWriter.newLine();
-                        }
-                        myBufferedWriter.close();
-                        toggleHighscoremenu();
-                        ResetScore();
-
-
+                        SaveGame();
                     } catch (IOException f) {
                         System.out.println("An error occurred.");
                         f.printStackTrace();
                     }
-
                 }
                 ResetPosition();
                 gameTimer.stop();
@@ -151,25 +115,7 @@ public class GameModel extends JComponent {
                     GameView.setmessage("ALL WALLS DESTROYED");
                     gameTimer.stop();
                     try {
-                        highscorelist = gethighscorelist();
-                        int score = GetScore();
-                        int temp;
-                        for (int j =0; j<getScoreLength(); j++) { //checking if our current score is higher than the highscores in the file
-                            if (score >= highscorelist[j]) {
-                                temp = highscorelist[j];
-                                highscorelist[j] = score;
-                                score = temp;
-                            }
-                        }
-                        FileWriter myWriter = new FileWriter("SaveFile.txt");
-                        BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
-                        for(int k=0; k<getScoreLength(); k++) {
-                            myBufferedWriter.write(String.valueOf(highscorelist[k]));
-                            myBufferedWriter.newLine();
-                        }
-                        myBufferedWriter.close();
-
-
+                        SaveGame();
                     } catch (IOException f) {
                         System.out.println("An error occurred.");
                         f.printStackTrace();
@@ -406,7 +352,7 @@ public class GameModel extends JComponent {
 
     /**
      * gets us our array of miniballs so we can use them in collision detection
-     * @return
+     * @return the array of MiniBalls
      */
     public ArrayList<MiniBall> getMiniBalls(){return MiniBalls;}
 
@@ -484,13 +430,73 @@ public class GameModel extends JComponent {
         return data;
     }
 
+    /**
+     * getdebugConsole gets us our debugConsole to display on screen
+     * @return debugConsole
+     */
     DebugConsole getdebugConsole(){return debugConsole;}
 
+    /**
+     * getGameView gets us our GameView
+     * @return the GameView
+     */
     GameView getGameView(){return GameView;}
 
+    /**
+     * getGameController gets us our game controller in order to perform logical operations based on what is there
+     * @return the GameController
+     */
     GameController getGameController(){return GameController;}
 
+    /**
+     * getGameTimer gets us our game timer so we know if the game is running or not
+     * @return the gameTimer
+     */
     Timer getGameTimer(){return gameTimer;}
 
+    /**
+     * createSaveFile creates an empty savefile if one doesn't already exist
+     * @throws IOException in case the file cannot be created
+     */
+    void createSaveFile() throws IOException {
+        File SaveFile = new File("SaveFile.txt");
+        if (SaveFile.createNewFile()) {
+            System.out.println("File created: " + SaveFile.getName());
+            FileWriter myWriter = new FileWriter(SaveFile.getName());
+            BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
+            for(int i=0; i<getScoreLength(); i++) {
+                myBufferedWriter.write("0 ");
+                myBufferedWriter.newLine();
+            }
+            myBufferedWriter.close();
+        } else {
+            System.out.println("File already exists.");
+        }
+    }
 
+    /**
+     * SaveGame opens the savefile that we have created and checks if the player's current score is higher than any of the highscores, if so, it moves all the other scores down one and registers the player's high score
+     * @throws IOException in case the save file doesn't exist
+     */
+    void SaveGame() throws IOException {
+        highscorelist = gethighscorelist();
+        int score = GetScore();
+        int temp;
+        for (int j =0; j<getScoreLength(); j++) { //checking if our current score is higher than the highscores in the file
+            if (score >= highscorelist[j]) {
+                temp = highscorelist[j];
+                highscorelist[j] = score;
+                score = temp;
+            }
+        }
+        FileWriter myWriter = new FileWriter("SaveFile.txt");
+        BufferedWriter myBufferedWriter = new BufferedWriter(myWriter);
+        for(int k=0; k<getScoreLength(); k++) {
+            myBufferedWriter.write(String.valueOf(highscorelist[k]));
+            myBufferedWriter.newLine();
+        }
+        myBufferedWriter.close();
+        toggleHighscoremenu();
+        ResetScore();
+    }
 }

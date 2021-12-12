@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 
 public class DebugPanel extends JPanel {
 
+    private static final int slidermin = -4;
+    private static final int slidermax = 4;
     private static final Color DEF_BKG = Color.WHITE;
 
 
@@ -31,8 +33,8 @@ public class DebugPanel extends JPanel {
         JButton skipLevel = makeButton("Skip Level", e -> gameModel.getLevels().nextLevel());
         JButton resetBalls = makeButton("Reset Balls", e -> gameModel.resetBallCount());
 
-        ballXSpeed = makeSlider(-4,4,e -> gameModel.getBall().setXSpeed(ballXSpeed.getValue()));
-        ballYSpeed = makeSlider(-4,4,e -> gameModel.getBall().setYSpeed(ballYSpeed.getValue()));
+        ballXSpeed = makeSlider(e -> gameModel.getBall().setXSpeed(ballXSpeed.getValue()));
+        ballYSpeed = makeSlider(e -> gameModel.getBall().setYSpeed(ballYSpeed.getValue()));
 
         this.add(skipLevel);
         this.add(resetBalls);
@@ -64,13 +66,11 @@ public class DebugPanel extends JPanel {
 
     /**
      * makeSlider creates a slider
-     * @param min the minimum value of the slider
-     * @param max the maximum value of the slider
      * @param e the method to be called when the slider is used
      * @return the created slider
      */
-    private JSlider makeSlider(int min, int max, ChangeListener e){
-        JSlider out = new JSlider(min,max);
+    private JSlider makeSlider(ChangeListener e){
+        JSlider out = new JSlider(slidermin, slidermax);
         out.setMajorTickSpacing(1);
         out.setSnapToTicks(true);
         out.setPaintTicks(true);

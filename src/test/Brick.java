@@ -47,8 +47,8 @@ abstract public class Brick  {
 
         /**
          * Crack is the constructor method for the crack class, which represents a crack that forms in bricks that take more than 1 hit to break
-         * @param crackDepth
-         * @param steps
+         * @param crackDepth the depth of the crack
+         * @param steps the number of lines that make up a crack
          */
         public Crack(int crackDepth, int steps){
 
@@ -156,22 +156,11 @@ abstract public class Brick  {
             crack.append(path,true);
         }
 
-        /**
-         *
-         * @param bound
-         * @return
-         */
         private int randomInBounds(int bound){
             int n = (bound * 2) + 1;
             return rnd.nextInt(n) - bound;
         }
 
-        /**
-         *
-         * @param i
-         * @param divisions
-         * @return
-         */
         private boolean inMiddle(int i, int divisions){
             int low = (Crack.CRACK_SECTIONS / divisions);
             int up = low * (divisions - 1);
@@ -179,11 +168,6 @@ abstract public class Brick  {
             return  (i > low) && (i < up);
         }
 
-        /**
-         *
-         * @param bound
-         * @return
-         */
         private int jumps(int bound){
 
             if(rnd.nextDouble() > Crack.JUMP_PROBABILITY)
@@ -192,13 +176,6 @@ abstract public class Brick  {
 
         }
 
-        /**
-         *
-         * @param from
-         * @param to
-         * @param direction
-         * @return
-         */
         private Point makeRandomPoint(Point from,Point to, int direction){
 
             Point out = new Point();
@@ -253,7 +230,7 @@ abstract public class Brick  {
      * makeBrickFace is parent method that is overrided by its child classes and is used to make a brickFace, the visual aspect of the brick
      * @param pos the position of the brick
      * @param size the size of the brick
-     * @return
+     * @return the brick's face to be drawn on screen
      */
     protected abstract Shape makeBrickFace(Point pos,Dimension size);
 

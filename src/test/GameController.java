@@ -4,8 +4,6 @@ package test;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.util.Scanner;
 /**
  * Created by Karim on 09/12/2021
  * @author Karim
@@ -17,7 +15,7 @@ public class GameController extends JComponent implements KeyListener,MouseListe
 
     boolean GameEnd = false;
     private boolean showPauseMenu;
-    private GameModel gameModel;
+    private final GameModel gameModel;
     private GameView gameView;
 
 
@@ -188,7 +186,7 @@ public class GameController extends JComponent implements KeyListener,MouseListe
 
     /**
      * mouseMoved
-     * @param mouseEvent
+     * @param mouseEvent variable representing a mouse input
      */
     @Override
     public void mouseMoved(MouseEvent mouseEvent){
