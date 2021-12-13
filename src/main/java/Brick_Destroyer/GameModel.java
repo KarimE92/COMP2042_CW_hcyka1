@@ -59,10 +59,9 @@ public class GameModel extends JComponent {
         ballCount = 3;
         ballLost = false;
         Rectangle drawArea = new Rectangle(0, 0, GameView.getwidth(), GameView.getheight());
+
         player = new Player((Point) StartingPos.clone(),150,15, drawArea);
-
         levels = new Levels(drawArea,brickCount,lineCount,brickDimensionRatio);
-
         area = drawArea;
 
 
@@ -77,7 +76,6 @@ public class GameModel extends JComponent {
         }
         //initialize the first level
         getLevels().nextLevel();
-
         gameTimer = new Timer(10,e ->{
             move();
             findImpacts();
