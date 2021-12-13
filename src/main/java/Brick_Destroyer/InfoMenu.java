@@ -29,7 +29,7 @@ public class InfoMenu extends JComponent implements MouseListener, MouseMotionLi
     private final Rectangle backButton;
 
     Toolkit t=Toolkit.getDefaultToolkit();
-    private final Image Info_Image = t.getImage("src/main/resources/InfoScreen.png");
+    private final Image Info_Image = t.getImage(getClass().getResource("/InfoScreen.png"));
 
     private final Font buttonFont;
 

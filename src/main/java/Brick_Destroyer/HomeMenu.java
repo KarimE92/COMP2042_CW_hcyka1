@@ -31,7 +31,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
 
 
     Toolkit t=Toolkit.getDefaultToolkit();
-    private final Image Title_Image = t.getImage("src/main/resources/Title_Image.jpg");
+    private final Image Title_Image = t.getImage(getClass().getResource("/Title_Image.jpg"));
 
     private final Rectangle menuFace;
     private final Rectangle startButton;
@@ -103,7 +103,7 @@ public class HomeMenu extends JComponent implements MouseListener, MouseMotionLi
         drawButton(g2d);
     }
 
-    /**
+    /**S
      * drawText draws all the text for the HomeMenu on screen
      * @param g2d the graphics to paint the game with
      */
