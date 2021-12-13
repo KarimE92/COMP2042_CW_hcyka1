@@ -8,6 +8,21 @@
     <artifactId>Brick_Destroyer</artifactId>
     <version>Version 1.0</version>
 
+    <properties>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
+        </dependency>
+
+
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -20,14 +35,8 @@
                         </manifest>
                     </archive>
                 </configuration>
-
             </plugin>
         </plugins>
     </build>
 
-    <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
-    </properties>
-    
 </project>
